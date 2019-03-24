@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Moments.Models.Profile>
+
+@{
+    ViewBag.Title = "MyFriends";
+    Layout = "~/Views/Shared/LayoutUser.cshtml";
+}
+
+<h2>MyFriends</h2>
+
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(model => model.image)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.username)
+        </th>
+        
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @{
+                    var base64 = Convert.ToBase64String(item.image);
+                    var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                }
+                <img id="@item.username" src="@imgSrc" class="img-rounded" width="50" height="50" />
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.username)
+            </td>
+            
+            <td>
+                @Html.ActionLink("Delete", "Delete", "User", new { id = item.username }, new { @class = "btn btn-danger btn-md" })
+            </td>
+        </tr>
+    }
+
+</table>
+
+

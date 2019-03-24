@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Moments.Models.Notifications>
+
+@{
+    ViewBag.Title = "showNotifications";
+    Layout = "~/Views/Shared/LayoutUser.cshtml";
+}
+
+<h2>Notifications</h2>
+
+<table class="table">
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @if (item.type.Equals("Friend Request") && item.status.Equals("Not Accepted"))
+                {
+                    <div class="alert alert-info">
+                        <strong>@Html.DisplayFor(modelItem => item.uFrom)</strong><p class="alert-link">sent you friend request</p>
+                    </div>
+
+                    <form method="post" action="AddFriendAccepted">
+                        <input type="submit" class="btn btn-info" value="Accept" />
+                        <input type="hidden" value=@item.username name="u1" />
+                        <input type="hidden" value=@item.uFrom name="u2" />
+                        <input type="hidden" value=@item.id name="id" />
+
+                    </form>
+                }
+                @if (item.type.Equals("Friend Request") && item.status.Equals("Accepted"))
+                {
+                    <div class="alert alert-info">
+                        <p class="alert-link">You are friend now with</p><strong>@Html.DisplayFor(modelItem => item.uFrom)</strong>
+                    </div>
+                }
+            </td>
+        </tr>
+    }
+
+</table>

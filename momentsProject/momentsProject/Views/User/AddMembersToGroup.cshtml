@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "AddMembersToGroup";
+    Layout = "~/Views/Shared/LayoutUser.cshtml";
+}
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+
+<div class="form-group">
+    <label for="text">Add Member Name :</label>
+    <input type="text" class="form-control" id="MemberName" name="MemberName" required>
+    <br />
+    <p id="Status"></p>
+    <input id="Button1" type="button" value="Add Member" onclick="Email_Check()" />
+</div>
+
+<script>
+
+     function Email_Check() {
+        $("#Status").html("Checking...");
+         $.post("@Url.Action("CheckLogInInformation", "User")",
+
+            {
+                username1: $("#MemberName").val()
+            },
+        function (data) {
+            if (data == 1) {
+                $("#Status").html('<font color="Green">Corrent User , User Has Been Added</font>');
+                $("#Email").css("border-color", "Green");
+            } else if (data == 0) {
+                $("#Status").html('<font color="Red"> InCorrent User Name , Please Check your data</font>');
+                $("#Email").css("border-color", "Red");
+            }
+            else if (data ==2) {
+                $("#Status").html('<font color="Red">You Are already at this group</font>');
+                $("#Email").css("border-color", "Red");
+            }
+
+            }
+         );
+    }
+
+</script>

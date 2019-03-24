@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Moments.dal.userMoments>
+
+@{
+    ViewBag.Title = "UserMoments";
+    Layout = "~/Views/Shared/LayoutUser.cshtml";
+}
+
+<h2>UserMoments</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(model => model.mid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.uType)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.mid)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.uType)
+        </td>
+        <td>
+            @if (item.uType == "Admin")
+            {
+                @Html.ActionLink("Delete Group", "ExitGroup", "User", new { id = item.mid }, new { @class = "btn btn-default btn-md" })
+            }
+            else
+            {
+                @Html.ActionLink("Exit Group", "ExitGroup", "User", new { id = item.mid }, new { @class = "btn btn-default btn-md" })
+            }
+
+        </td>
+    </tr>
+}
+
+</table>

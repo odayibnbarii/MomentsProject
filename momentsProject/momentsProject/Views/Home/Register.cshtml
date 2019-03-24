@@ -1,0 +1,86 @@
+﻿
+@{
+    ViewBag.Title = "Register";
+}
+
+<div class="jumbotron">
+    <h1>REGISTER</h1>
+    <p class="lead">Register to get the full features of 'MOMENTS'</p>
+</div>
+<form action="RegAction" method="post" id="Reg">
+    <p>It's Simple and easy ..</p>
+    <div class="form-group">
+        <label for="text">First Name</label>
+        <input type="text" class="form-control" name="firstName" required>
+    </div>
+    <div class="form-group">
+        <label for="text">Last Name</label>
+        <input type="text" class="form-control" name="lastName" required>
+    </div>
+    <div class="form-group">
+        <label for="text">Username</label>
+        <input type="text" class="form-control" name="username" required>
+    </div>
+    <div class="form-group">
+        <label for="email">E-mail Address</label>
+        <input type="email" class="form-control" name="email" required>
+        <p>@ViewData["eMess"]</p>
+    </div>
+    <div class="form-group">
+        <label for="pwd">Password</label>
+        <input type="password" class="form-control" name="password" required>
+    </div>
+    <div class="form-group">
+        <label for="pwd">Re-write Password</label>
+        <input type="password" class="form-control" name="rePass" required>
+        <p>@ViewData["pMess"]</p>
+    </div>
+    <input class="btn btn-primary" type="submit" value="Register">
+    <button class="btn btn-warning" value="Reset form" type="reset" onclick="res()">Remove All</button>
+</form>
+<script type="text/javascript">
+var form = document.getElementById('formTest').onsubmit = function(e)
+{
+    e.preventDefault();
+    var formdata = new FormData(); //FormData object
+    var fileInput = document.getElementById('files');
+    if (fileInput != "" && fileInput.files.length > 0)
+    {
+        //Iterating through each files selected in fileInput
+        for (i = 0; i < fileInput.files.length; i++)
+        {
+            //Appending each file to FormData object
+            formdata.append(fileInput.files[i].name, fileInput.files[i]);
+        }
+        //Creating an XMLHttpRequest and sending
+        var xhr = new XMLHttpRequest();
+
+        var url = '@Url.Action("add","Home")';
+        xhr.open('POST', url);
+        xhr.send(formdata);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200)
+            {
+                var result = xhr.responseText;
+
+            }
+        }
+        return false;
+    }
+}
+</script>
+<form action="@Url.Action("add", "Home")" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <label for="file">Filename:</label>
+    <input type="file" name="file" id="file" />
+
+    <input type="submit" name="submit" value="Upload" />
+</form>
+
+
+<script>
+    function res() {
+        document.getElementById("Reg").reset();
+    }
+</script>
+

@@ -1,0 +1,78 @@
+﻿//add this code to register.cshtml
+<script type = "text/javascript" >
+var form = document.getElementById('formTest').onsubmit = function(e)
+{
+    e.preventDefault();
+    var formdata = new FormData(); //FormData object
+    var fileInput = document.getElementById('files');
+    if (fileInput != "" && fileInput.files.length > 0)
+    {
+        //Iterating through each files selected in fileInput
+        for (i = 0; i < fileInput.files.length; i++)
+        {
+            //Appending each file to FormData object
+            formdata.append(fileInput.files[i].name, fileInput.files[i]);
+        }
+        //Creating an XMLHttpRequest and sending
+        var xhr = new XMLHttpRequest();
+
+        var url = '@Url.Action("add","Home")';
+        xhr.open('POST', url);
+        xhr.send(formdata);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200)
+            {
+                var result = xhr.responseText;
+
+            }
+        }
+        return false;
+    }
+}
+</script>
+<form action = "@Url.Action("add", "Home")" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <label for="file">Filename:</label>
+    <input type = "file" name="file" id="file" />
+
+    <input type = "submit" name="submit" value="Upload" />
+</form>
+
+//add this code in home controller
+ public void add(HttpPostedFileBase file)
+{
+    byte[] data;
+
+    using (Stream inputStram = file.InputStream)
+    {
+        MemoryStream memorystram = inputStram as MemoryStream;
+        if (memorystram == null)
+        {
+            memorystram = new MemoryStream();
+            inputStram.CopyTo(memorystram);
+
+        }
+        profileDal pdal = new profileDal();
+        Profile profile = new Profile();
+        data = memorystram.ToArray();
+        profile.username = "testImage";
+        profile.biography = "empty";
+        profile.image = data;
+        pdal.profilesList.Add(profile);
+        try
+        {
+
+            pdal.SaveChanges();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+		
+		}
+		}
+
+
+        /*testImage is saved username and profile, its contains the default photo
+         * when someone try to register, we take the image from profile testImage and assigns his image
+         * to the new profile

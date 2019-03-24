@@ -1,0 +1,119 @@
+﻿@model Moments.ModelView.UserViewModel
+
+@{
+    ViewBag.Title = "MyProfile";
+    Layout = "~/Views/Shared/LayoutUser.cshtml";
+}
+
+<h2>My Profile</h2>
+<script type="text/javascript">
+                                var form = document.getElementById('formTest').onsubmit = function(e)
+                                {
+                                    e.preventDefault();
+                                    var formdata = new FormData(); //FormData object
+                                    var fileInput = document.getElementById('files');
+                                    if (fileInput != "" && fileInput.files.length > 0)
+                                    {
+                                        //Iterating through each files selected in fileInput
+                                        for (i = 0; i < fileInput.files.length; i++)
+                                        {
+                                            //Appending each file to FormData object
+                                            formdata.append(fileInput.files[i].name, fileInput.files[i]);
+                                        }
+                                        //Creating an XMLHttpRequest and sending
+                                        var xhr = new XMLHttpRequest();
+
+                                        var url = '@Url.Action("add","Home")';
+                                        xhr.open('POST', url);
+                                        xhr.send(formdata);
+                                        xhr.onreadystatechange = function() {
+                                            if (xhr.readyState == 4 && xhr.status == 200)
+                                            {
+                                                var result = xhr.responseText;
+
+                                            }
+                                        }
+                                        return false;
+                                    }
+                                }
+
+</script>
+
+
+<div class="container">
+    <div class="row">
+        <div class="card col-sm-6" align="left">
+            @{
+                var base64 = Convert.ToBase64String(Model.profile.image);
+                var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+            }
+            <img src="@imgSrc" alt="John" style="width:100%">
+            <h1>@Model.user.firstName @Model.user.lastName</h1>
+            <p class="title">@Model.profile.biography</p>
+            <p></p>
+            <div style="margin: 24px 0;">
+                <a href="#"><i class="fa fa-dribbble"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+                <a href="#"><i class="fa fa-linkedin"></i></a>
+                <a href="#"><i class="fa fa-facebook"></i></a>
+            </div>
+            <p><a href="mailto:@Model.user.email"><button id="btn">Contact</button></a></p>
+        </div>
+        <div class="col-sm-7">
+
+            @*  @using (Html.BeginForm("editProfile",
+                   "User",
+                   FormMethod.Post,
+                   new { enctype = "multipart/form-data" }))
+        {*@
+            <form action="editProfile" method="post">
+                <table class="table">
+                    <tr>
+                        <th>First name:</th>
+                        <th><input id="firstname" name="firstName" type="text" value="@Model.user.firstName" /></th>
+                    </tr>
+                    <tr>
+                        <th>Last name:</th>
+                        <th><input id="lastname" name="lastname" type="text" value="@Model.user.lastName" /></th>
+                    </tr>
+                    <tr>
+                        <th>Biography :</th>
+                        <th><input id="biography" name="biography" type="text" value="@Model.profile.biography" /></th>
+                    </tr>
+                    <tr>
+                        <th>Password:</th>
+                        <th><input id="password" name="password" type="password" /></th>
+                    </tr>
+                    <tr>
+                        <th>Re-Password:</th>
+                        <th><input id="repassword" name="repassword" type="password" /></th>
+                    </tr>
+
+                    <tr>
+                        <th></th>
+                        <th><input class="btn btn-primary" id="LoginButton" type="submit" value="Edit" /></th>
+                    </tr>
+                    <tr>
+                        
+                </table>
+                <center><font color="red">@TempData["Message"]</font></center>
+            </form>
+            <form action="editProfilePhoto" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <table class="table">
+                    <tr>
+                        <th>Profile Photo:</th>
+                        <th>
+                            <input type="file" name="file" id="file" />
+                            <input type="submit" name="submit" value="Upload" />
+                        </th>
+                    </tr>
+                </table>   
+            </form>
+                
+            
+
+        </div>
+    </div>
+
+</div>

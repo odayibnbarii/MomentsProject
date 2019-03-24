@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewBag.Title = "GroupCreate";
+    Layout = "~/Views/Shared/LayoutUser.cshtml";
+}
+
+<form action="RunCreateGroup" method="post">
+
+    <br />
+    <br />
+    <div class="form-group">
+        <label for="text">Moment Name :</label>
+        <input type="text" class="form-control" name="MomentName" required>
+    </div>
+    <br />
+    <br />
+    <div class="form-group">
+        <label for="text">Moment Description :</label>
+        <textarea rows="4" cols="50" input type="text" class="form-control" name="MomentDescription" required></textarea>
+    </div>
+    <br />
+    <b id="Status"></b>
+    <br />
+    <br />
+    <input class="btn btn-primary" type="submit" value="Click To Add Members">
+    <br />
+</form>
+<br />
+<br />
+<form action="editProfilePhoto" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="text">Moment IMAGE :</label>
+    </div>
+    @Html.AntiForgeryToken()
+    <table class="table">
+        <tr>
+            <th>
+                <input type="file" name="file" id="file" />
+                <br />
+                <input type="submit" name="submit" value="Upload" />
+            </th>
+        </tr>
+    </table>
+
+</form>
+
+
+
+

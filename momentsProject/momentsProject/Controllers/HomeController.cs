@@ -91,22 +91,17 @@ namespace Moments.Controllers
             List<admins> adminsLst = (from x in admin.adminsLst
                                       where x.username.Equals(info.username)
                                       select x).ToList<admins>();
-
-            if (user.Count == 1 && adminsLst.Count() == 1)
+            Session["Admin"] = "False";
+            if (adminsLst.Count() == 1)
             {
-                Session["CurrentUsername"] = info.username;
-                Session["firstName"] = user[0].firstName;
-                Session["lastName"] = user[0].lastName;
-                Session["connected"] = "1";
                 Session["admin"] = "True";
-                return RedirectToAction("AdminMainPage", "Admin");
             }
             if (user.Count() == 1)
             {
                 Session["CurrentUsername"] = info.username;
                 Session["firstName"] = user[0].firstName;
                 Session["lastName"] = user[0].lastName;
-                Session["connected"] = "1";
+                Session["connected"] = "1";     
                 return RedirectToAction("UserMainPage", "User");
             }
             TempData["LogMess"] = "The username or the password isn't correct";

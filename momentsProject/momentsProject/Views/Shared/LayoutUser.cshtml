@@ -133,6 +133,16 @@
                 <li>@Html.ActionLink("Edit My Groups", "UserMainPage", "User")</li>
             </ul>
         </li>
+        @if (Session["Admin"].Equals("True"))
+        {
+            <li>
+                <a href="#">Admin</a>
+                <ul class="dropdown">
+                    <li>@Html.ActionLink("Admins list","adminsList","Admin")</li>
+                </ul>
+            </li>
+        }
+
         <li>
             <form method="post" action="searchByUsrName">
                 <input style="margin-top:10px" type="text" name="text" placeholder="Search..."> <button class="btn btn-default" type="submit" name="Search">Search</button>

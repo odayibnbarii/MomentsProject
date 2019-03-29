@@ -1,0 +1,87 @@
+﻿@model Moments.ModelView.AdminsViewModel
+@using Moments.Models;
+@{
+    ViewBag.Title = "AdminsList";
+    Layout = "~/Views/Shared/LayoutUser.cshtml";
+}
+
+<h2>AdminsList</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-7">
+            <table class="table" id="customers">
+                <tr>
+                    <th>Username</th>          
+                    <th>Level</th>
+
+
+                </tr>
+                @foreach (admins adm in Model.adminsLst)
+                {
+                    if (adm.username != Model.admin.username)
+                    {
+                        <tr class="active">
+                            <td>@adm.username</td>
+                            <td>@adm.aLevel</td>
+                            @if (Model.admin.aLevel == "A" && adm.username != "Admin")
+                            {
+                                <td>
+                                    <form action="deleteAdmin" method="post">
+                                        <input type="submit" value="delete" />
+                                        <input type="hidden" name="rowDelete" value="@adm.username" />
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="ChangeAdminLevel" method="post">
+                                        <input type="submit" value="Promote" />
+                                        <input type="hidden" name="row" value="@adm.username" />
+                                        <input type="hidden" name="toDo" value="promote">
+                                    </form>
+                                </td>
+                                <td>
+                                    <form action="ChangeAdminLevel" method="post">
+                                        <input type="submit" value="Demote" />
+                                        <input type="hidden" name="row" value="@adm.username" />
+                                        <input type="hidden" name="toDo" value="demote">
+                                    </form>
+                                </td>
+                            }
+                        </tr>
+                    }
+                }
+            </table>
+        </div>
+        <div class="col-sm-4">
+            <form action="NewAdmin" method="post">
+                <table class="table" id="customers">
+                    <tr>
+                        <th></th>
+                        <th>new admin</th>
+                    </tr>
+                    <tr>
+                        <td><font color="black"><strong>Username:</strong></font></td>
+                        <td><input id="AdminName" name="username" type="text" required /></td>
+                    </tr>
+                    <tr>
+                        <td><font color="black"><strong>Level:</strong></font></td>
+                        <td>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="sel1" name="aLevel">
+                                    <option>A</option>
+                                    <option>B</option>
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+              
+                </table>
+                <center>
+                    <p><input class="btn btn-primary" id="registerButton" type="submit" value="Add" /></p>
+                    <p><strong><font color="red">@TempData["ADDERROR"]</font></strong></p>
+                </center>
+                <br /><br />
+            </form>
+        </div>
+    </div>
+</div>

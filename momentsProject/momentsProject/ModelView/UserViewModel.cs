@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Moments.Models;
+
+
 namespace Moments.ModelView
 {
     public class UserViewModel

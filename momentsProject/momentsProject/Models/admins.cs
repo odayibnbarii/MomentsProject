@@ -15,5 +15,7 @@ namespace Moments.Models
 
         [Required]
         public string aLevel { get; set; }
+
+        
     }
 }

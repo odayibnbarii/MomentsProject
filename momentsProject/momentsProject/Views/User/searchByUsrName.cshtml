@@ -10,6 +10,8 @@
 <div class="row">
 @foreach (var item in Model)
 {
+    if (!item.username.Equals("testImage") && !item.username.Equals(Session["CurrentUsername"].ToString()))
+    {
             <div class="card col-sm-6" align="left">
                 @{
                     var base64 = Convert.ToBase64String(item.image);
@@ -27,6 +29,8 @@
                 </div>
                 @Html.ActionLink("Add friend", "AddFriend", "User", new { id = item.username }, new { @class = "btn btn-default btn-md" })
             </div>
+                        }
                     }
+
    </div>
 

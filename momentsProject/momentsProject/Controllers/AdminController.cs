@@ -124,5 +124,31 @@ namespace Moments.Controllers
 
             return RedirectToAction("usersList", "Admin");
         }
+
+        public ActionResult DeleteUser()
+        {
+            profileDal pdal = new profileDal();
+            UsersStatusDal usdal = new UsersStatusDal();
+            notificationsDal ndal = new notificationsDal();
+            friendsDal fdal = new friendsDal();
+
+            String toDelete = Request.Form["row"].ToString();
+            udal.userLst.RemoveRange(udal.userLst.Where(x => x.username.Equals(toDelete)));
+            adal.adminsLst.RemoveRange(adal.adminsLst.Where(x => x.username.Equals(toDelete)));
+            pdal.profilesList.RemoveRange(pdal.profilesList.Where(x => x.username.Equals(toDelete)));
+            usdal.statuses.RemoveRange(usdal.statuses.Where(x => x.username.Equals(toDelete)));
+            ndal.nLst.RemoveRange(ndal.nLst.Where(x => x.username.Equals(toDelete)));
+            fdal.FriendsLst.RemoveRange(fdal.FriendsLst.Where(x => x.username.Equals(toDelete)));
+            fdal.FriendsLst.RemoveRange(fdal.FriendsLst.Where(x => x.friendUsername.Equals(toDelete)));
+
+            udal.SaveChanges();
+            adal.SaveChanges();
+            pdal.SaveChanges();
+            usdal.SaveChanges();
+            ndal.SaveChanges();
+            fdal.SaveChanges();
+
+            return RedirectToAction("usersList","Admin");
+        }
     }
 }

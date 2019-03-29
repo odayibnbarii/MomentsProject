@@ -14,6 +14,7 @@ namespace Moments.Controllers
         // GET: Admin
         private adminsDal adal = new adminsDal();
         private usersDal udal = new usersDal();
+        private UsersStatusDal usdal = new UsersStatusDal();
         private AdminsViewModel avm = new AdminsViewModel();
 
  
@@ -92,7 +93,36 @@ namespace Moments.Controllers
 
         public ActionResult searchByUsrName()
         {
-            return RedirectToAction("searchByUsrName", "User");
+            return RedirectToAction("searchByUsrName", "User"," ");
+        }
+
+        public ActionResult usersList()
+        {
+            UserViewModel uvm = new UserViewModel();
+            uvm.users = (from x in udal.userLst select x).ToList<users>();
+            uvm.admin = GetAdmin();
+
+            return View(uvm);
+
+        }
+
+        public ActionResult UserActivity()
+        {
+            String toChange = Request.Form["row"].ToString();
+            usersStatus us = new usersStatus();
+            us.username = toChange;
+
+            if (Request.Form["toDo"].Equals("Activate"))
+                us.status = "Activated";
+            else
+                us.status = "Deactivated";
+
+            usdal.statuses.RemoveRange(usdal.statuses.Where(x => x.username == toChange));
+            usdal.SaveChanges();
+            usdal.statuses.Add(us);
+            usdal.SaveChanges();
+
+            return RedirectToAction("usersList", "Admin");
         }
     }
 }

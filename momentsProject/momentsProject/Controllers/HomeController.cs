@@ -15,6 +15,7 @@ namespace Moments.Controllers
         private static byte[] img;
         public ActionResult Index()
         {
+            TempData["LogMess"] = "";
             if (Session["connected"] == null)
             {
                 Session["connected"] = "0";
@@ -41,6 +42,7 @@ namespace Moments.Controllers
         {
             usersDal emails = new usersDal();
             profileDal pdal = new profileDal();
+            UsersStatusDal usdal = new UsersStatusDal();
             List<users> checkLSt = (from tmp in emails.userLst where tmp.email.Contains(userReg.email) select tmp).ToList<users>();
             if (checkLSt.Count > 0)
             {
@@ -56,6 +58,7 @@ namespace Moments.Controllers
                 else
                 {
                     Profile profile = new Profile();
+                    usersStatus uss = new usersStatus();
                     List<Profile> defProfile = (from x in pdal.profilesList
                                                 where x.username.Equals("testImage")
                                                 select x).ToList<Profile>();
@@ -65,6 +68,11 @@ namespace Moments.Controllers
                     profile.biography = "empty";
                     profile.image = defProfile[0].image;
                     pdal.profilesList.Add(profile);
+                    uss.username = userReg.username;
+                    uss.status = "Activated";
+                    usdal.statuses.Add(uss);
+                    usdal.SaveChanges();
+                    
                     try
                     {
 
@@ -84,6 +92,7 @@ namespace Moments.Controllers
         {
             usersDal usrInfo = new usersDal();
             adminsDal admin = new adminsDal();
+            UsersStatusDal usdal = new UsersStatusDal();
             List<users> user = (from usr in usrInfo.userLst
                                 where usr.username.Equals(info.username)
                                   && usr.password.Equals(info.password)
@@ -91,6 +100,10 @@ namespace Moments.Controllers
             List<admins> adminsLst = (from x in admin.adminsLst
                                       where x.username.Equals(info.username)
                                       select x).ToList<admins>();
+            List<usersStatus> statuslist = (from x in usdal.statuses
+                                            where x.username.Equals(info.username)
+                                            select x).ToList<usersStatus>();
+           
             Session["Admin"] = "False";
             if (adminsLst.Count() == 1)
             {
@@ -98,6 +111,11 @@ namespace Moments.Controllers
             }
             if (user.Count() == 1)
             {
+                if (statuslist[0].status.Equals("Deactivated"))
+                {
+                    TempData["LogMess"] = "your account deactivated by admins!";
+                    return View("Login");
+                }
                 Session["CurrentUsername"] = info.username;
                 Session["firstName"] = user[0].firstName;
                 Session["lastName"] = user[0].lastName;

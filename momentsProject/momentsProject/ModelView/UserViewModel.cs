@@ -12,5 +12,6 @@ namespace Moments.ModelView
         public users user { get; set; }
         public List<users> users { get; set; }
         public Profile profile { get; set; }
+        public admins admin { get; set; }
     }
 }

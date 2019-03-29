@@ -198,11 +198,20 @@ namespace Moments.Controllers
             }
             return View(nots);
         }
-        public ActionResult searchByUsrName()
+        public ActionResult searchByUsrName(String text)
         {
             //search profile, not user
             profileDal pDal = new profileDal();
-            string usrName = Request.Form["text"].ToString();
+
+            string usrName;
+            try
+            {
+                usrName = Request.Form["text"].ToString();
+            }
+            catch
+            {
+                usrName = text;
+            }
             List<Profile> profiles = (from x in pDal.profilesList
                                       where x.username.StartsWith(usrName)
                                       select x).ToList<Profile>();

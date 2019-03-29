@@ -1,0 +1,107 @@
+﻿@model Moments.ModelView.UserViewModel
+@using Moments.Models;
+
+@{
+    ViewBag.Title = "usersList";
+    Layout = "~/Views/Shared/LayoutUser.cshtml";
+}
+
+<h2>usersList</h2>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-7">
+            <table class="table" id="customers">
+                <tr>
+                    <th>Username</th>
+                    <th>Full name</th>
+                    <th>E-mail</th>
+                    @if (Model.admin.aLevel.Equals("A"))
+                    {
+                        <th>password</th>
+                    }
+
+
+
+                </tr>
+                @foreach (users user in Model.users)
+                {
+                    if (user.username != Model.admin.username && !user.username.Equals("Admin"))
+                    {
+                <tr class="active">
+                    <td>@user.username</td>
+                    <td>@user.firstName @user.lastName</td>
+                    <td>@user.email</td>
+                    @if (Model.admin.aLevel.Equals("A") && !user.username.Equals("Admin"))
+                    {
+                        <td>@user.password</td>
+                    }
+                    else if (Model.admin.aLevel.Equals("A") && user.username.Equals("Admin"))
+                    {
+                        <td>***</td>
+                    }
+                  
+
+                    <td>
+                        <form action="UserActivity" method="post">
+                            <input type="submit" value="Activate" />
+                            <input type="hidden" name="row" value="@user.username" />
+                            <input type="hidden" name="toDo" value="Activate" />
+                        </form>
+                    </td>
+                    <td>
+                        <form action="UserActivity" method="post">
+                            <input type="submit" value="Deactivate" />
+                            <input type="hidden" name="row" value="@user.username" />
+                            <input type="hidden" name="toDo" value="Deactivate" />
+                        </form>
+                    </td>
+                    @if (Model.admin.aLevel == "A" && user.username != "Admin")
+                    {
+
+                        <td>
+                            <form action="deleteUser" method="post">
+                                <input type="submit" value="delete" />
+                                <input type="hidden" name="rowDelete" value="@user.username" />
+                            </form>
+                        </td>
+                    }
+                </tr>
+                    }
+                }
+            </table>
+        </div>
+        <div class="col-sm-4">
+            <form action="NewAdmin" method="post">
+                <table class="table" id="customers">
+                    <tr>
+                        <th></th>
+                        <th>new admin</th>
+                    </tr>
+                    <tr>
+                        <td><font color="black"><strong>Username:</strong></font></td>
+                        <td><input id="AdminName" name="username" type="text" required /></td>
+                    </tr>
+                    <tr>
+                        <td><font color="black"><strong>Level:</strong></font></td>
+                        <td>
+                            <div class="col-sm-10">
+                                <select class="form-control" id="sel1" name="aLevel">
+                                    <option>A</option>
+                                    <option>B</option>
+                                </select>
+                            </div>
+                        </td>
+                    </tr>
+
+                </table>
+                <center>
+                    <p><input class="btn btn-primary" id="registerButton" type="submit" value="Add" /></p>
+                    <p><strong><font color="red">@TempData["ADDERROR"]</font></strong></p>
+                </center>
+                <br /><br />
+            </form>
+        </div>
+    </div>
+</div>

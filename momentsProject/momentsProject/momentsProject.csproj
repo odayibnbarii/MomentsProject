@@ -143,6 +143,7 @@
     <Compile Include="dal\notificationsDal.cs" />
     <Compile Include="dal\profileDal.cs" />
     <Compile Include="dal\userMomentDal.cs" />
+    <Compile Include="dal\UsersStatusDal.cs" />
     <Compile Include="Models\userMoments.cs" />
     <Compile Include="dal\usersDal.cs" />
     <Compile Include="Global.asax.cs">
@@ -154,6 +155,7 @@
     <Compile Include="Models\Notifications.cs" />
     <Compile Include="Models\Profile.cs" />
     <Compile Include="Models\users.cs" />
+    <Compile Include="Models\usersStatus.cs" />
     <Compile Include="ModelView\AdminsViewModel.cs" />
     <Compile Include="ModelView\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -214,6 +216,7 @@
     <Content Include="Views\User\UserMoments.cshtml" />
     <Content Include="Views\Admin\AdminMainPage.cshtml" />
     <Content Include="Views\Admin\AdminsList.cshtml" />
+    <Content Include="Views\Admin\usersList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

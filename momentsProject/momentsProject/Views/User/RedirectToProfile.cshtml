@@ -1,0 +1,23 @@
+﻿@model Moments.ModelView.UserViewModel
+@{
+    ViewBag.Title = "RedirectToProfile";
+    Layout = "~/Views/Shared/LayoutUser.cshtml";
+}
+
+
+
+<div class="
+     center-block">
+    <div align="center">
+        <h2>@Model.user.username</h2>
+        @{
+            var base64 = Convert.ToBase64String(Model.profile.image);
+            var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+        }
+        <img src="@imgSrc" alt="John" style="width:200px; height:200px">
+        <h1>@Model.user.firstName @Model.user.lastName</h1>
+        <p class="title">@Model.profile.biography</p>
+        <p><a href="mailto:@Model.user.email" class="btn btn-primary">Contact</a></p>
+    </div>
+    <p>Posts</p>
+</div>

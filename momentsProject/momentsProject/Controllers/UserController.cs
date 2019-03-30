@@ -447,7 +447,54 @@ namespace Moments.Controllers
             }
             return View("UserMainPage");
         }
+        public static bool isFriend(string id)
+        {
+            bool friendCheck = false;
+            friendsDal fDal = new friendsDal();
+            List<Friends> f = (from x in fDal.FriendsLst
+                               where x.username.Equals(id) || x.friendUsername.Equals(id)
+                               select x).ToList<Friends>();
+            List<Friends> tmp = new List<Friends>();
+            foreach (Friends fr in f)
+            {
+                if (fr.username.Equals(id) || fr.friendUsername.Equals(id))
+                {
+                    tmp.Add(fr);
+                }
+            }
+            if (tmp.Count() > 0)
+            {
+                friendCheck = true;
+            }
+            return friendCheck;
 
+        }
+        public ActionResult RedirectToProfile()
+        {
+            string usr = Request.Form["usr"].ToString();
+            usersDal uDal = new usersDal();
+            UserViewModel view = new UserViewModel();
+            profileDal pDal = new profileDal();
+            List<Profile> profile = (from x in pDal.profilesList
+                                     where x.username.Equals(usr)
+                                     select x).ToList<Profile>();
+            List<users> u = (from x in uDal.userLst
+                             where x.username.Equals(usr)
+                             select x).ToList<users>();
+
+            view.profile = profile[0];
+            view.user = u[0];
+            return View(view);
+            //return RedirectToAction("ViewFriendProfile", "Profile", usrname);
+        }
+        private void classActive(string tab)
+        {
+            ViewData["myMoments"] = "#";
+            ViewData["myProfile"] = "#";
+            ViewData["myFriends"] = "#";
+            ViewData[tab] = "active";
+
+        }
 
 
     }

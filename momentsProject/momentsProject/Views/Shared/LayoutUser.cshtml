@@ -106,7 +106,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "UserMainPage", "User")</li>
-                    <li>@Html.ActionLink("Notifications", "showNotifications", "User")</li>
+                    <li>@Html.ActionLink("Notifications", "showNotifications", "Notifications")</li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                    
@@ -120,19 +120,10 @@
         
 
     <ul class="nav nav-tabs container">
-        <li class="@ViewData["myMomentsActive"]">@Html.ActionLink("My Moments", "UserMoments", "User")</li>
-        <li class="@ViewData["AddPublicActive"]">@Html.ActionLink("Add Public Photo", "addPublic", "public")</li>
-        <li class="@ViewData["PostsActive"]">@Html.ActionLink("posts", "posts", "Moment")</li>
-        <li class="@ViewData["MyProfile"]">@Html.ActionLink("Profile", "MyProfile", "User")</li>
-        <li class="@ViewData["MyFrinds"]">@Html.ActionLink("My Friends", "MyFriends", "User")</li>
-        <li>
-            <a href="#">Groups</a>
-            <ul class="dropdown">
-                <li>@Html.ActionLink("Create Pictures Group", "CreateGroup", "User")</li>
-                <li>@Html.ActionLink("My Groups", "UserMainPage", "User")</li>
-                <li>@Html.ActionLink("Edit My Groups", "UserMainPage", "User")</li>
-            </ul>
-        </li>
+        <li class="@ViewData["momentsActive"]">@Html.ActionLink("My Moments", "UserMoments", "User")</li>
+        <li class="@ViewData["profileActive"]">@Html.ActionLink("Profile", "MyProfile", "User")</li>
+        <li class="@ViewData["friendsActive"]">@Html.ActionLink("My Friends", "MyFriends", "User")</li>
+
         @if (Session["Admin"].Equals("True"))
         {
             <li>

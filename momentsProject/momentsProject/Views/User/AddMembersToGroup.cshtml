@@ -10,11 +10,17 @@
 
 
 <div class="form-group">
-    <label for="text">Add Member Name :</label>
-    <input type="text" class="form-control" id="MemberName" name="MemberName" required>
-    <br />
-    <p id="Status"></p>
-    <input id="Button1" type="button" value="Add Member" onclick="Email_Check()" />
+    <form action="SaveMoment" method="post">
+        <div class="alert alert-success">
+        <p class="alert-success">Created Successfuly, just add your friends!</p>
+        </div>
+        <label for="text">Add Member Name :</label>
+        <input type="text" class="form-control" id="MemberName" name="MemberName" required>
+        <br />
+        <p id="Status"></p>
+        <input class="btn btn-default" id="Button1" type="button" value="Add Member" onclick="Email_Check()" />
+        <button type="submit" class="btn btn-success">Save</button>
+    </form>
 </div>
 
 <script>

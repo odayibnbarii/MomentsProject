@@ -5,11 +5,10 @@
     Layout = "~/Views/Shared/LayoutUser.cshtml";
 }
 
-<h2>UserMoments</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
+@Html.ActionLink("Create Moment", "CreateGroup", "User", new { @class = "btn btn-default btn-md" })
+
+<br /><br />
 <table class="table">
     <tr>
 
@@ -22,27 +21,28 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
+    @foreach (var item in Model)
+    {
+        <tr>
 
-        <td>
-            @Html.DisplayFor(modelItem => item.mid)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.uType)
-        </td>
-        <td>
-            @if (item.uType == "Admin")
-            {
-                @Html.ActionLink("Delete Group", "ExitGroup", "User", new { id = item.mid }, new { @class = "btn btn-default btn-md" })
-            }
-            else
-            {
-                @Html.ActionLink("Exit Group", "ExitGroup", "User", new { id = item.mid }, new { @class = "btn btn-default btn-md" })
-            }
+            <td>
+                @Html.DisplayFor(modelItem => item.mid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.uType)
+            </td>
+            <td>
+                @if (item.uType == "Admin")
+                {
+                    @Html.ActionLink("Delete Group", "ExitGroup", "User", new { id = item.mid }, new { @class = "btn btn-default btn-md" })
+                }
+                else
+                {
+                    @Html.ActionLink("Exit Group", "ExitGroup", "User", new { id = item.mid }, new { @class = "btn btn-default btn-md" })
+                }
 
-        </td>
-    </tr>
-}
+            </td>
+        </tr>
+    }
 
 </table>

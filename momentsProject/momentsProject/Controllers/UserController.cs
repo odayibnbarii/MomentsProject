@@ -24,6 +24,7 @@ namespace Moments.Controllers
         // GET: User
         public ActionResult UserMainPage()
         {
+            GetUser();
             return View();
         }
 
@@ -36,9 +37,6 @@ namespace Moments.Controllers
             //  MomentController.m = new List<moments>();
             return RedirectToAction("Index", "Home");
         }
-
-
-
         public users GetUser()
         {
             usersDal dal = new usersDal();
@@ -56,9 +54,9 @@ namespace Moments.Controllers
             List<Profile> curr = (from x in dal.profilesList where x.username == currentuser select x).ToList<Profile>();
             return curr[0];
         }
-
         public ActionResult MyProfile()
         {
+            classActive("profileActive");
             UserViewModel uvm = new UserViewModel();
             uvm.user = GetUser();
             uvm.profile = GetProfile();
@@ -67,6 +65,7 @@ namespace Moments.Controllers
         }
         public ActionResult MyFriends()
         {
+            classActive("friendsActive");
             friendsDal fDal = new friendsDal();
             String uname = Session["CurrentUsername"].ToString();
             Debug.WriteLine(uname);
@@ -120,7 +119,6 @@ namespace Moments.Controllers
 
 
         }
-
         public ActionResult editProfile()
         {
             string firstname = Request.Form["firstName"].ToString();
@@ -183,21 +181,6 @@ namespace Moments.Controllers
             }
             return RedirectToAction("MyProfile", "User");
         }
-
-        public ActionResult showNotifications()
-        {
-            string usr = Session["CurrentUsername"].ToString();
-            notificationsDal nDal = new notificationsDal();
-            List<Notifications> nots = (from x in nDal.nLst
-                                        where x.username.Equals(usr)
-                                        select x).ToList<Notifications>();
-            if (nots.Count > 1)
-            {
-                Debug.WriteLine(nots[0].status);
-                Debug.WriteLine(nots[0].uFrom);
-            }
-            return View(nots);
-        }
         public ActionResult searchByUsrName(String text)
         {
             //search profile, not user
@@ -216,53 +199,6 @@ namespace Moments.Controllers
                                       where x.username.StartsWith(usrName)
                                       select x).ToList<Profile>();
             return View(profiles);
-        }
-        public ActionResult AddFriendAccepted()
-        {
-            string u1 = Request.Form["u1"].ToString();
-            string u2 = Request.Form["u2"].ToString();
-            int id = Convert.ToInt32(Request.Form["id"]);
-            friendsDal fDal = new friendsDal();
-            List<Friends> checkFriends = (from x in fDal.FriendsLst
-                                          where (x.username.Equals(u1) && x.friendUsername.Equals(u2)) ||
-                                                (x.username.Equals(u2) && x.friendUsername.Equals(u1))
-                                                select x).ToList<Friends>();
-            Friends f = new Friends();
-            f.username = u1;
-            f.friendUsername = u2;
-            fDal.FriendsLst.Add(f);
-            fDal.SaveChanges();
-            Notifications n = new Notifications();
-            notificationsDal nDal = new notificationsDal();
-            List<Notifications> nots = (from x in nDal.nLst select x).ToList();
-            List<Notifications> prev = (from x in nDal.nLst
-                                        where x.id == id
-                                        select x).ToList<Notifications>();
-            nDal.nLst.RemoveRange(nDal.nLst.Where(x => x.id == id));
-            nDal.SaveChanges();
-            n.id = id;
-            n.status = "Accepted";
-            n.type = "Friend Request";
-            n.username = u1;
-            n.uFrom = u2;
-            n.dateSent = DateTime.Now;
-            n.dateSent = n.dateSent.Date;
-            nDal.nLst.Add(n);
-            nDal.SaveChanges();
-            n = new Notifications
-            {
-                dateSent = DateTime.UtcNow,
-                id = nots.Count() + 1,
-                type = "Friend Request",
-                status = "Accepted",
-                username = u2,
-                uFrom = u1
-            };
-            nDal.nLst.Add(n);
-            nDal.SaveChanges();
-
-            return RedirectToAction("showNotifications", "User");
-
         }
         public ActionResult AddFriend(String id)
         {
@@ -308,13 +244,6 @@ namespace Moments.Controllers
                                       select x).ToList<Profile>();
             return View("MyFriends",profiles);
         }
-        
-
-
-
-
-
-
         public ActionResult CreateGroup()
         {
             return View("GroupCreate");
@@ -323,7 +252,6 @@ namespace Moments.Controllers
         {
             return View("AddMembersToGroup");
         }
-
         public ActionResult RunCreateGroup(moments obj)
         {
             int counter;
@@ -400,6 +328,7 @@ namespace Moments.Controllers
         }
         public ActionResult UserMoments()
         {
+            classActive("momentsActive");
             users corruser = new users();
             corruser = GetUser();
             userMomentDal dusernames = new userMomentDal();
@@ -413,6 +342,10 @@ namespace Moments.Controllers
                                                    select tmp).ToList<userMoments>();
 
             return View(allmomentsusehave);
+        }
+        public ActionResult SaveMoment()
+        {
+            return RedirectToAction("UserMoments", "User");
         }
         public ActionResult ExitGroup(int id)
         {
@@ -452,7 +385,7 @@ namespace Moments.Controllers
             bool friendCheck = false;
             friendsDal fDal = new friendsDal();
             List<Friends> f = (from x in fDal.FriendsLst
-                               where x.username.Equals(id) || x.friendUsername.Equals(id)
+                               where x.username.Equals(user.username) || x.friendUsername.Equals(user.username)
                                select x).ToList<Friends>();
             List<Friends> tmp = new List<Friends>();
             foreach (Friends fr in f)
@@ -489,9 +422,9 @@ namespace Moments.Controllers
         }
         private void classActive(string tab)
         {
-            ViewData["myMoments"] = "#";
-            ViewData["myProfile"] = "#";
-            ViewData["myFriends"] = "#";
+            ViewData["momentsActive"] = "#";
+            ViewData["profileActive"] = "#";
+            ViewData["friendsActive"] = "#";
             ViewData[tab] = "active";
 
         }

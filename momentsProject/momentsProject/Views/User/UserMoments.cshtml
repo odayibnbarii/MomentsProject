@@ -13,10 +13,10 @@
     <tr>
 
         <th>
-            @Html.DisplayNameFor(model => model.mid)
+            Moment Id
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.uType)
+            Role
         </th>
         <th></th>
     </tr>
@@ -26,7 +26,7 @@
         <tr>
 
             <td>
-                @Html.DisplayFor(modelItem => item.mid)
+                @Html.ActionLink(item.mid.ToString(), "MomentView", "Moment", new { id = item.mid },null)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.uType)
@@ -42,6 +42,7 @@
                 }
 
             </td>
+            
         </tr>
     }
 

@@ -8,6 +8,7 @@ using System.IO;
 using System.Web;
 using System;
 using System.Diagnostics;
+using System.Web.Routing;
 
 namespace Moments.Controllers
 {
@@ -25,7 +26,7 @@ namespace Moments.Controllers
         public ActionResult UserMainPage()
         {
             GetUser();
-            return View();
+            return RedirectToAction("PublicPhoto", "Moment");
         }
 
 
@@ -37,6 +38,7 @@ namespace Moments.Controllers
             //  MomentController.m = new List<moments>();
             return RedirectToAction("Index", "Home");
         }
+        
         public users GetUser()
         {
             usersDal dal = new usersDal();

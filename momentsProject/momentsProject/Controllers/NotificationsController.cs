@@ -7,7 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace momentsProject.Controllers
+namespace Moments.Controllers
 {
     public class NotificationsController : Controller
     {
@@ -29,6 +29,7 @@ namespace momentsProject.Controllers
                 Debug.WriteLine(nots[0].status);
                 Debug.WriteLine(nots[0].uFrom);
             }
+            nots.OrderByDescending(x => x.id);
             return View(nots);
         }
 
@@ -69,7 +70,7 @@ namespace momentsProject.Controllers
                 dateSent = DateTime.UtcNow,
                 id = nots.Count() + 1,
                 type = "Friend Request",
-                status = "Accepted",
+                status = "Return Accepted",
                 username = u2,
                 uFrom = u1
             };
@@ -79,9 +80,86 @@ namespace momentsProject.Controllers
             return RedirectToAction("showNotifications", "Notifications");
 
         }
+
         public ActionResult searchByUsrName()
         {
             return RedirectToAction("searchByUsrName", "User");
+        }
+
+        public ActionResult inviteAccepted()
+        {
+            string username = Request.Form["username"];
+            string uFrom = Request.Form["uFrom"];
+            int id = Convert.ToInt32(Request.Form["id"]);
+            Notifications n = new Notifications();
+            notificationsDal nDal = new notificationsDal();
+            int size = (from x in nDal.nLst select x).ToList<Notifications>().Count() + 1;
+            List<Notifications> tmp = (from x in nDal.nLst
+                                       where x.id == id
+                                       select x).ToList<Notifications>();
+            nDal.nLst.RemoveRange(nDal.nLst.Where(x => x.id == id));
+            nDal.SaveChanges();
+            tmp[0].status = "Accepted";
+            nDal.nLst.Add(tmp[0]);
+            nDal.SaveChanges();
+            n.id = id;
+            n.dateSent = DateTime.Now.Date;
+            n.status = "Return Accepted";
+            n.type = tmp[0].type;
+            n.uFrom = username;
+            n.username = uFrom;
+            nDal.nLst.Add(n);
+            nDal.SaveChanges();
+            userMomentDal mDal = new userMomentDal();
+            userMoments uM = new userMoments();
+            int tableId = (from x in mDal.userMomentLST
+                           select x).ToList<userMoments>().Count() + 1;
+            uM.id = tableId;
+            uM.mid = Convert.ToInt32((tmp[0].type.Split(' '))[1]);
+            uM.uType = "User";
+            uM.username = username;
+            mDal.userMomentLST.Add(uM);
+            mDal.SaveChanges();
+            return RedirectToAction("showNotifications", "Notifications");
+
+        }
+        
+        public ActionResult joinAccepted()
+        {
+            string username = Request.Form["username"];
+            string uFrom = Request.Form["uFrom"];
+            int id = Convert.ToInt32(Request.Form["id"]);
+            Notifications n = new Notifications();
+            notificationsDal nDal = new notificationsDal();
+            int size = (from x in nDal.nLst select x).ToList<Notifications>().Count() + 1;
+            List<Notifications> tmp = (from x in nDal.nLst
+                                       where x.id == id
+                                       select x).ToList<Notifications>();
+            nDal.nLst.RemoveRange(nDal.nLst.Where(x => x.id == id));
+            nDal.SaveChanges();
+            tmp[0].status = "Accepted";
+            nDal.nLst.Add(tmp[0]);
+            nDal.SaveChanges();
+            n.id = id;
+            n.dateSent = DateTime.Now.Date;
+            n.status = "Return Accepted";
+            n.type = tmp[0].type;
+            n.uFrom = username;
+            n.username = uFrom;
+            nDal.nLst.Add(n);
+            nDal.SaveChanges();
+            userMomentDal mDal = new userMomentDal();
+            userMoments uM = new userMoments();
+            int tableId = (from x in mDal.userMomentLST
+                           select x).ToList<userMoments>().Count() + 1;
+            uM.id = tableId;
+            uM.mid = Convert.ToInt32((tmp[0].type.Split(' '))[1]);
+            uM.uType = "User";
+            uM.username = username;
+            mDal.userMomentLST.Add(uM);
+            mDal.SaveChanges();
+
+            return RedirectToAction("showNotifications", "Notifications");
         }
     }
 }

@@ -1,10 +1,14 @@
-﻿@model IEnumerable<Moments.dal.userMoments>
+﻿@model IEnumerable<Moments.Models.userMoments>
 
 @{
     ViewBag.Title = "UserMoments";
     Layout = "~/Views/Shared/LayoutUser.cshtml";
 }
 
+
+    <form method="post" action="searchMoment">
+        <input style="margin-top:10px" type="text" name="text" placeholder="Search Moments..."> <button class="btn btn-default" type="submit" name="Search">Search</button>
+    </form>
 
 @Html.ActionLink("Create Moment", "CreateGroup", "User", new { @class = "btn btn-default btn-md" })
 

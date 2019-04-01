@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Moments.Models.moments>
+
+@{
+    ViewBag.Title = "Search Results";
+    Layout = "~/Views/Shared/LayoutUser.cshtml";
+}
+<div class="row">
+    @foreach (var item in Model)
+    {
+    <div class="card col-sm-6 row" align="left">
+        @{
+            //var base64 = Convert.ToBase64String(Model.moment.mImage);
+            //var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+        }
+        <img src="~/images/img_avatar.png" alt="John" style="width:100%">
+        <h1>@item.mName</h1>
+        <p class="title">@item.mDescription</p>
+        @if (Moments.Controllers.MomentController.isMember(Moments.Controllers.UserController.user.username, item.mid))
+        {
+        <form method="post" action="ViewMoment">
+            <input hidden name="mid" value="@item.mid" />
+            <button type="submit" class="btn btn-default">View Moment</button>
+        </form>
+        }
+        else
+        {
+            <form method="post" action="JoinRequest">
+                <input hidden name="mid" value="@item.mid" />
+                <button type="submit" class="btn btn-default">Join Request</button>
+            </form>
+        }
+    </div>
+    }
+</div>

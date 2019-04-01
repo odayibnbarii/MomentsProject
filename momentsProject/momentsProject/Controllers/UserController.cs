@@ -306,6 +306,19 @@ namespace Moments.Controllers
                 oh = GetUser();
                 if (username1 != oh.username)
                 {
+                    Notifications n = new Notifications();
+                    notificationsDal nDal = new notificationsDal();
+                    int id = (from x in nDal.nLst
+                              select x).ToList<Notifications>().Count() + 1;
+                    n.dateSent = DateTime.Now.Date;
+                    n.id = id;
+                    n.status = "Not Accepted";
+                    n.type = "invite " + Session["mid"];
+                    n.username = username1;
+                    n.uFrom = oh.username;
+                    nDal.nLst.Add(n);
+                    nDal.SaveChanges();
+                    /*
                     userMoments usermoment = new userMoments();
                     usermoment.id = 1;
                     usermoment.mid = Convert.ToInt32(Session["mid"]);
@@ -313,6 +326,7 @@ namespace Moments.Controllers
                     usermoment.uType = "User";
                     umd.userMomentLST.Add(usermoment);
                     umd.SaveChanges();
+                    */
                     return Json(1);
                 }
                 else
@@ -342,6 +356,7 @@ namespace Moments.Controllers
                                                    select tmp).ToList<userMoments>();
 
             return View(allmomentsusehave);
+
         }
         public ActionResult SaveMoment()
         {
@@ -428,7 +443,36 @@ namespace Moments.Controllers
             ViewData[tab] = "active";
 
         }
-
+        public ActionResult searchMoment()
+        {
+            string text = Request.Form["text"];
+            momentsDal mDal = new momentsDal();
+            List<moments> result = (from x in mDal.momentsLst
+                                    where x.mName.StartsWith(text)
+                                    select x).ToList<moments>();
+            return View(result);
+        }
+        public ActionResult JoinRequest()
+        {
+            userMomentDal mDal = new userMomentDal();
+            int mid = Convert.ToInt32(Request.Form["mid"]);
+            List<userMoments> findAdmin = (from x in mDal.userMomentLST
+                                           where x.mid == mid &&
+                                                  x.uType.Equals("Admin")
+                                           select x).ToList<userMoments>();
+            string adminUsr = findAdmin[0].username;
+            notificationsDal nDal = new notificationsDal();
+            Notifications n = new Notifications();
+            n.uFrom = UserController.user.username;
+            n.username = adminUsr;
+            n.dateSent = DateTime.Now.Date;
+            n.id = (from x in nDal.nLst select x).ToList<Notifications>().Count + 1;
+            n.type = "Join " + mid;
+            n.status = "Not Accepted";
+            nDal.nLst.Add(n);
+            nDal.SaveChanges();
+            return RedirectToAction("UserMoments", "User");
+        }
 
     }
 }

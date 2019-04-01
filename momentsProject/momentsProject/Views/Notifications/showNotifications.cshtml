@@ -33,6 +33,65 @@
                         <p class="alert-link">You are friend now with</p><strong>@Html.DisplayFor(modelItem => item.uFrom)</strong>
                     </div>
                 }
+                @if (item.type.Equals("Friend Request") && item.status.Equals("Return Accepted"))
+                {
+                    <div class="alert alert-info">
+                        <strong>@Html.DisplayFor(modelItem => item.uFrom)</strong><p class="alert-link">accepted your friend request</p>
+                    </div>
+                }
+                @if (item.type.StartsWith("invite") && item.status.Equals("Not Accepted"))
+                {
+                    <div class="alert alert-info">
+                        <strong>@Html.DisplayFor(modelItem => item.uFrom)</strong><p class="alert-link">has invited you to <strong>@Moments.Controllers.MomentController.getMomentTitle(item.type)</strong></p>
+                    </div>
+
+                    <form method="post" action="inviteAccepted">
+
+                        <input type="submit" class="btn btn-info" value="Accept" />
+                        <input type="hidden" value=@item.username name="username" />
+                        <input type="hidden" value=@item.uFrom name="uFrom" />
+                        <input type="hidden" value=@item.id name="id" />
+
+                    </form>
+                }
+                @if (item.type.StartsWith("invite") && item.status.Equals("Accepted"))
+                {
+                    <div class="alert alert-info">
+                        <p class="alert-link">You are a member of <strong>@Moments.Controllers.MomentController.getMomentTitle(item.type)</strong></p>
+                    </div>
+                }
+                @if (item.type.StartsWith("invite") && item.status.Equals("Return Accepted"))
+                {
+                    <div class="alert alert-info">
+                        <strong>@Html.DisplayFor(modelItem => item.uFrom)</strong><p class="alert-link">accepted your invitation to <strong>@Moments.Controllers.MomentController.getMomentTitle(item.type)</strong></p>
+                    </div>
+                }
+                @if (item.type.StartsWith("Join") && item.status.Equals("Not Accepted"))
+                {
+                    <div class="alert alert-info">
+                        <strong>@Html.DisplayFor(modelItem => item.uFrom)</strong><p class="alert-link">asked to join <strong>@Moments.Controllers.MomentController.getMomentTitle(item.type)</strong></p>
+                    </div>
+                    <form method="post" action="joinAccepted">
+
+                        <input type="submit" class="btn btn-info" value="Accept" />
+                        <input type="hidden" value=@item.username name="username" />
+                        <input type="hidden" value=@item.uFrom name="uFrom" />
+                        <input type="hidden" value=@item.id name="id" />
+
+                    </form>
+                }
+                @if (item.type.StartsWith("Join") && item.status.Equals("Accepted"))
+                {
+                    <div class="alert alert-info">
+                        <p class="alert-link">You are now a member of <strong>@Moments.Controllers.MomentController.getMomentTitle(item.type)</strong></p>
+                    </div>
+                }
+                @if (item.type.StartsWith("Join") && item.status.Equals("Return Accepted"))
+                {
+                    <div class="alert alert-info">
+                        <strong>@Html.DisplayFor(modelItem => item.uFrom)</strong><p class="alert-link">accepted your join request to <strong>@Moments.Controllers.MomentController.getMomentTitle(item.type)</strong></p>
+                    </div>
+                }
             </td>
         </tr>
     }

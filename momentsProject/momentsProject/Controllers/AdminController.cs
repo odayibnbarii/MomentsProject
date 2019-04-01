@@ -137,7 +137,7 @@ namespace Moments.Controllers
             adal.adminsLst.RemoveRange(adal.adminsLst.Where(x => x.username.Equals(toDelete)));
             pdal.profilesList.RemoveRange(pdal.profilesList.Where(x => x.username.Equals(toDelete)));
             usdal.statuses.RemoveRange(usdal.statuses.Where(x => x.username.Equals(toDelete)));
-            ndal.nLst.RemoveRange(ndal.nLst.Where(x => x.username.Equals(toDelete)));
+            ndal.nLst.RemoveRange(ndal.nLst.Where(x => x.username.Equals(toDelete) || x.uFrom.Equals(toDelete)));
             fdal.FriendsLst.RemoveRange(fdal.FriendsLst.Where(x => x.username.Equals(toDelete)));
             fdal.FriendsLst.RemoveRange(fdal.FriendsLst.Where(x => x.friendUsername.Equals(toDelete)));
 

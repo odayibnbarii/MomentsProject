@@ -136,15 +136,18 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MomentController.cs" />
     <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="dal\adminsDal.cs" />
+    <Compile Include="dal\messagesDal.cs" />
     <Compile Include="dal\momentsDal.cs" />
     <Compile Include="dal\friendsDal.cs" />
     <Compile Include="dal\notificationsDal.cs" />
     <Compile Include="dal\profileDal.cs" />
     <Compile Include="dal\userMomentDal.cs" />
     <Compile Include="dal\UsersStatusDal.cs" />
+    <Compile Include="Models\Messages.cs" />
     <Compile Include="Models\userMoments.cs" />
     <Compile Include="dal\usersDal.cs" />
     <Compile Include="Global.asax.cs">
@@ -158,6 +161,7 @@
     <Compile Include="Models\users.cs" />
     <Compile Include="Models\usersStatus.cs" />
     <Compile Include="ModelView\AdminsViewModel.cs" />
+    <Compile Include="ModelView\MomentsViewModel.cs" />
     <Compile Include="ModelView\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="طرق اللفه\firstTimeProfile.txt" />
@@ -219,6 +223,8 @@
     <Content Include="Views\Admin\usersList.cshtml" />
     <Content Include="Views\User\RedirectToProfile.cshtml" />
     <Content Include="Views\Notifications\showNotifications.cshtml" />
+    <Content Include="Views\Moment\Moment.cshtml" />
+    <Content Include="Views\User\searchMoment.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

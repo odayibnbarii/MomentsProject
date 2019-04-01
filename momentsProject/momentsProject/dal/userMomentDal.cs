@@ -2,7 +2,7 @@
 using System.Data.Entity;
 
 
-namespace Moments.dal
+namespace Moments.Models
 {
     public class userMomentDal : DbContext
     {

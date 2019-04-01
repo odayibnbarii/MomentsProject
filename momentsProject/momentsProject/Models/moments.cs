@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Moments.dal
+namespace Moments.Models
 {
     public class moments
     {

@@ -1,22 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
-namespace Moments.Models
+namespace momentsProject.Models
 {
-    public class userMoments
+    public class Messages
     {
         [Key]
         [Required]
-        public int id { get; set; }
-        [Required]
-        public string username { get; set; }
+        public int id;
         [Required]
         public int mid { get; set; }
         [Required]
-        public string uType { get; set; }
+        public string message { get; set; }
     }
 }

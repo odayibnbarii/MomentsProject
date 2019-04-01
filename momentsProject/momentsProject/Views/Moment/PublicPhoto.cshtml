@@ -1,0 +1,69 @@
+﻿@model Moments.ModelView.PublicMomentPhotoView
+@using Moments.Models
+@{
+    ViewBag.Title = "PublicPhoto";
+    Layout = "~/Views/Shared/LayoutUser.cshtml";
+}
+
+<html>
+<head>
+    <title>Public Moments</title>
+    <h3>Public Moments</h3>
+
+</head>
+<body>
+
+    @using (Html.BeginForm("AddPublicPhoto", "Moment", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.photo, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <input type="file" name="imageModel" required class="btn btn-default" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <p>@ViewData["publicPhoto"]</p>
+                    <input type="submit" value="Add" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+
+
+
+
+
+
+
+
+    <div class="container">
+        <div class="row">
+            @foreach (publicMomentPhoto obj in Model.publicMomentphotos)
+            {
+                <div class="col-md-4">
+                    <div class="thumbnail">
+                        @{
+                            var base64 = Convert.ToBase64String(obj.photo);
+                            var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                        }
+                        <img id="@obj.postcode" src="@imgSrc" alt="Lights" style="width:100%" />
+                        <div class="caption">
+                            <p>@obj.username</p>
+                        </div>
+
+                    </div>
+                </div>
+
+            }
+        </div>
+    </div>
+</body>
+</html>
+

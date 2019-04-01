@@ -8,7 +8,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace momentsProject.Controllers
+namespace Moments.Controllers
 {
     public class MomentController : Controller
     {
@@ -200,26 +200,7 @@ namespace momentsProject.Controllers
             ViewData[tab] = "active";
 
         }
-    }
-}
-using Moments.dal;
-using Moments.Models;
-using Moments.ModelView;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 
-namespace Moments.Controllers
-{
-    public class MomentController : Controller
-    {
-        // GET: Moment
-        public ActionResult Index()
-        {
-            return View();
-        }
         public static string getMomentTitle(string invitation)
         {
             List<string> splitted = invitation.Split(' ').ToList<string>();

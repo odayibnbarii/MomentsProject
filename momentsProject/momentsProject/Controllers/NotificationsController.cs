@@ -155,7 +155,7 @@ namespace Moments.Controllers
             uM.id = tableId;
             uM.mid = Convert.ToInt32((tmp[0].type.Split(' '))[1]);
             uM.uType = "User";
-            uM.username = username;
+            uM.username = uFrom;
             mDal.userMomentLST.Add(uM);
             mDal.SaveChanges();
 

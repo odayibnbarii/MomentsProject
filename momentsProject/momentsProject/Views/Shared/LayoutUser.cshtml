@@ -120,10 +120,10 @@
         
 
     <ul class="nav nav-tabs container">
+        <li class="@ViewData["publicActive"]">@Html.ActionLink("Feeds", "PublicPhoto", "Moment")</li>
         <li class="@ViewData["momentsActive"]">@Html.ActionLink("My Moments", "UserMoments", "User")</li>
         <li class="@ViewData["profileActive"]">@Html.ActionLink("Profile", "MyProfile", "User")</li>
         <li class="@ViewData["friendsActive"]">@Html.ActionLink("My Friends", "MyFriends", "User")</li>
-        <li class="@ViewData["publicActive"]">@Html.ActionLink("Public Moments", "PublicPhoto", "Moment")</li>
 
         @if (Session["Admin"].Equals("True"))
         {

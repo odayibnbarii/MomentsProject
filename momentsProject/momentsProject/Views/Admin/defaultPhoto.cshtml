@@ -1,0 +1,48 @@
+﻿
+@{
+    ViewBag.Title = "defaultPhoto";
+    Layout = "~/Views/Shared/LayoutAdmin.cshtml";
+}
+
+
+<h2>Default Photo</h2>
+<script type="text/javascript">
+var form = document.getElementById('formTest').onsubmit = function(e)
+{
+    e.preventDefault();
+    var formdata = new FormData(); //FormData object
+    var fileInput = document.getElementById('files');
+    if (fileInput != "" && fileInput.files.length > 0)
+    {
+        //Iterating through each files selected in fileInput
+        for (i = 0; i < fileInput.files.length; i++)
+        {
+            //Appending each file to FormData object
+            formdata.append(fileInput.files[i].name, fileInput.files[i]);
+        }
+        //Creating an XMLHttpRequest and sending
+        var xhr = new XMLHttpRequest();
+
+        var url = '@Url.Action("changeDefault","Admin")';
+        xhr.open('POST', url);
+        xhr.send(formdata);
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200)
+            {
+                var result = xhr.responseText;
+
+            }
+        }
+        return false;
+    }
+}
+</script>
+<form action="@Url.Action("changeDefault", "Admin")" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <label for="file">Filename:</label>
+    <input type="file" name="file" id="file" />
+
+    <input type="submit" name="submit" value="Upload" />
+</form>
+
+

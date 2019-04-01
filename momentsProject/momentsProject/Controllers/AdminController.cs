@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -34,6 +35,10 @@ namespace Moments.Controllers
             avm.admin = GetAdmin();
             return View("AdminsList", avm);
 
+        }
+        public ActionResult defaultPhoto()
+        {
+            return View();
         }
 
         public ActionResult NewAdmin(admins admin) 
@@ -149,6 +154,39 @@ namespace Moments.Controllers
             fdal.SaveChanges();
 
             return RedirectToAction("usersList","Admin");
+        }
+        public void changeDefault(HttpPostedFileBase file)
+        {
+            byte[] data;
+
+            using (Stream inputStram = file.InputStream)
+            {
+                MemoryStream memorystram = inputStram as MemoryStream;
+                if (memorystram == null)
+                {
+                    memorystram = new MemoryStream();
+                    inputStram.CopyTo(memorystram);
+
+                }
+                profileDal pdal = new profileDal();
+                Profile profile = new Profile();
+                data = memorystram.ToArray();
+                profile.username = "testImage";
+                profile.biography = "empty";
+                profile.image = data;
+                pdal.profilesList.RemoveRange(pdal.profilesList.Where(x => x.username.Equals("testImage")));
+                pdal.profilesList.Add(profile);
+                try
+                {
+
+                    pdal.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace momentsProject.Controllers
+namespace Moments.Controllers
 {
     public class MomentController : Controller
     {

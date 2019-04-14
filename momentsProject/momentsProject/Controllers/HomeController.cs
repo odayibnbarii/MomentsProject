@@ -12,7 +12,6 @@ namespace Moments.Controllers
 {
     public class HomeController : Controller
     {
-        private static byte[] img;
         public ActionResult Index()
         {
             TempData["LogMess"] = "";

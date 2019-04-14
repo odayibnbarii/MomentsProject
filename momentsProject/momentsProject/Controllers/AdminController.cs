@@ -18,11 +18,19 @@ namespace Moments.Controllers
         private UsersStatusDal usdal = new UsersStatusDal();
         private AdminsViewModel avm = new AdminsViewModel();
 
- 
+    
 
-        public admins GetAdmin()
+        public admins GetAdmin(string admin="")
         {
-            string currentuser = Session["CurrentUsername"].ToString();
+            string currentuser;
+            try
+            {
+               currentuser = Session["CurrentUsername"].ToString();
+            }
+            catch (Exception)
+            {
+                currentuser = admin;
+            }
             List<admins> curr = (from x in adal.adminsLst
                                 where x.username == currentuser
                                 select x).ToList<admins>();
@@ -52,6 +60,7 @@ namespace Moments.Controllers
                 
                 adal.adminsLst.Add(admin);
                 adal.SaveChanges();
+                ViewBag.MESSAGE = "successfully added";
             }
             else if (admins.Count >0)
             {
@@ -130,14 +139,22 @@ namespace Moments.Controllers
             return RedirectToAction("usersList", "Admin");
         }
 
-        public ActionResult DeleteUser()
+        public ActionResult DeleteUser(string delete)
         {
             profileDal pdal = new profileDal();
             UsersStatusDal usdal = new UsersStatusDal();
             notificationsDal ndal = new notificationsDal();
             friendsDal fdal = new friendsDal();
-
-            String toDelete = Request.Form["row"].ToString();
+            String toDelete;
+            try
+            {
+                toDelete = Request.Form["row"].ToString();
+            }
+            catch (Exception)
+            {
+                toDelete = delete;
+            }
+             
             udal.userLst.RemoveRange(udal.userLst.Where(x => x.username.Equals(toDelete)));
             adal.adminsLst.RemoveRange(adal.adminsLst.Where(x => x.username.Equals(toDelete)));
             pdal.profilesList.RemoveRange(pdal.profilesList.Where(x => x.username.Equals(toDelete)));

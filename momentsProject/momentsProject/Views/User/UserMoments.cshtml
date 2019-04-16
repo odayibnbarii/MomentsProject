@@ -6,21 +6,24 @@
 }
 
 
-    <form method="post" action="searchMoment">
-        <input style="margin-top:10px" type="text" name="text" placeholder="Search Moments..."> <button class="btn btn-default" type="submit" name="Search">Search</button>
-    </form>
+<form method="post" action="searchMoment">
+    <input style="margin-top:10px" type="text" name="text" placeholder="Search Moments..."> <button class="btn btn-default" type="submit" name="Search">Search</button>
+</form>
 
+<br /><br>
 @Html.ActionLink("Create Moment", "CreateGroup", "User", new { @class = "btn btn-default btn-md" })
 
-<br /><br />
+<br />
+
+<br />
 <table class="table">
     <tr>
 
         <th>
-            Moment Id
+            @Html.DisplayNameFor(model => model.mid)
         </th>
         <th>
-            Role
+            @Html.DisplayNameFor(model => model.uType)
         </th>
         <th></th>
     </tr>
@@ -30,23 +33,26 @@
         <tr>
 
             <td>
-                @Html.ActionLink(item.mid.ToString(), "MomentView", "Moment", new { id = item.mid },null)
+                @Html.DisplayFor(modelItem => item.mid)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.uType)
             </td>
             <td>
-                @if (item.uType == "Admin")
-                {
-                    @Html.ActionLink("Delete Group", "ExitGroup", "User", new { id = item.mid }, new { @class = "btn btn-default btn-md" })
-                }
-                else
-                {
-                    @Html.ActionLink("Exit Group", "ExitGroup", "User", new { id = item.mid }, new { @class = "btn btn-default btn-md" })
-                }
-
+                <center>
+                    &nbsp;&nbsp;
+                    @if (item.uType == "Admin")
+                    {
+                        @Html.ActionLink("Delete Group", "ExitGroup", "User", new { id = item.id, mid1 = item.mid }, new { @class = "btn btn-default btn-md" })
+                        @Html.ActionLink("View All Group Users", "View_All_Group_Members", "User", new { mid1 = item.mid }, new { @class = "btn btn-default btn-md" })
+                        @Html.ActionLink("Add Members To Group ", "View_All_Group_Members", "User", new { mid1 = item.mid }, new { @class = "btn btn-default btn-md" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Exit Group", "ExitGroup", "User", new { id = item.id, mid1 = item.mid }, new { @class = "btn btn-default btn-md" })
+                    }
+                </center>
             </td>
-            
         </tr>
     }
 

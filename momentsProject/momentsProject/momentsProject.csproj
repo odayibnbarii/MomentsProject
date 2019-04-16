@@ -262,6 +262,7 @@
     <Content Include="Views\Moment\PublicPhoto.cshtml" />
     <Content Include="Views\Moment\searchByUsrName.cshtml" />
     <Content Include="Views\Admin\defaultPhoto.cshtml" />
+    <Content Include="Views\User\View_All_Group_Members.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -297,7 +298,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>54570</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:54570/</IISUrl>
+          <IISUrl>http://localhost:54571/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

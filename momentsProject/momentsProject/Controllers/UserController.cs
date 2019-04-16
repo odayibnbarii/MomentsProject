@@ -320,7 +320,7 @@ namespace Moments.Controllers
                     n.uFrom = oh.username;
                     nDal.nLst.Add(n);
                     nDal.SaveChanges();
-                    /*
+                    
                     userMoments usermoment = new userMoments();
                     usermoment.id = 1;
                     usermoment.mid = Convert.ToInt32(Session["mid"]);
@@ -328,7 +328,7 @@ namespace Moments.Controllers
                     usermoment.uType = "User";
                     umd.userMomentLST.Add(usermoment);
                     umd.SaveChanges();
-                    */
+                    
                     return Json(1);
                 }
                 else
@@ -342,6 +342,9 @@ namespace Moments.Controllers
                 return Json(0);
             }
         }
+
+
+       
         public ActionResult UserMoments()
         {
             classActive("momentsActive");
@@ -360,19 +363,55 @@ namespace Moments.Controllers
             return View(allmomentsusehave);
 
         }
-        public ActionResult SaveMoment()
+        public ActionResult View_All_Group_Members(int mid1)
         {
-            return RedirectToAction("UserMoments", "User");
+            profileDal pDal = new profileDal();
+            userMomentDal usermdal = new userMomentDal();
+            var qr = (from x in usermdal.userMomentLST where x.mid == mid1 select x.username).ToArray();
+            List<Profile> allprofiles = (from x in pDal.profilesList select x).ToList<Profile>();
+            List<userMoments> AllUsers = (from x in usermdal.userMomentLST select x).ToList<userMoments>();
+            List<Profile> selected = new List<Profile>();
+            List<userMoments> usersinthisgroup = new List<userMoments>();
+
+            var size = qr.Count();
+
+            foreach (var z in AllUsers)
+            {
+                for (int v = 0; v < size; v++)
+                {
+                    if (z.username == qr[v])
+                    {
+                        usersinthisgroup.Add(z);
+                    }
+                }
+            }
+            Session["UsersList"] = usersinthisgroup;
+            foreach (var z in allprofiles)
+            {
+                for (int v = 0; v < size; v++)
+                {
+                    if (z.username == qr[v])
+                    {
+                        selected.Add(z);
+                    }
+                }
+            }
+            Session["SelectedList"] = selected;
+            return View(selected);
         }
-        public ActionResult ExitGroup(int id)
+        public ActionResult ExitGroup(int id, int mid1)
         {
             users corruser = new users();
             corruser = GetUser();
             userMomentDal usermdal = new userMomentDal();
             momentsDal momentsmdal = new momentsDal();
-             var getifuserUser = usermdal.userMomentLST.Where(x => (corruser.username == x.username)
-                                                                && x.uType == "User").SingleOrDefault();
-            var getifuseradmin = usermdal.userMomentLST.Where(x => (corruser.username == x.username) && x.uType == "Admin").SingleOrDefault();
+
+            var getifuserUser = usermdal.userMomentLST.Where(x => (corruser.username == x.username)
+            && x.uType == "User" && id == x.id).SingleOrDefault();
+
+
+            var getifuseradmin = usermdal.userMomentLST.Where(x => (corruser.username == x.username)
+            && x.uType == "Admin" && id == x.id).SingleOrDefault();
 
             /* List<userMoments> allmomentsusehave = (from tmp in dusernames.userMomentLST
                                                   where corruser.username.Equals(tmp.username)
@@ -385,18 +424,59 @@ namespace Moments.Controllers
                                                        where id.Equals(tmp.mid)
                                                        select tmp).ToList<userMoments>();
 
-                usermdal.userMomentLST.RemoveRange(usermdal.userMomentLST.Where(x => x.mid == id));
+                usermdal.userMomentLST.RemoveRange(usermdal.userMomentLST.Where(x => x.mid == mid1));
                 usermdal.SaveChanges();
-                momentsmdal.momentsLst.RemoveRange(momentsmdal.momentsLst.Where(x => x.mid == id));
+                momentsmdal.momentsLst.RemoveRange(momentsmdal.momentsLst.Where(x => x.mid == mid1));
                 momentsmdal.SaveChanges();
             }
             else if (getifuserUser != null)
             {
-                usermdal.userMomentLST.RemoveRange(usermdal.userMomentLST.Where(x => (x.mid == id) && (x.username == corruser.username)));
+                usermdal.userMomentLST.RemoveRange(usermdal.userMomentLST.Where(x => (x.mid == mid1) && (x.username == corruser.username)));
                 usermdal.SaveChanges();
             }
             return View("UserMainPage");
         }
+        public ActionResult DeleteFriend(string username)
+        {
+            List<userMoments> myList = (List<userMoments>)Session["UsersList"];
+            List<Profile> SELECTEDLIST = (List<Profile>)Session["SelectedList"];
+            List<Profile> templist = SELECTEDLIST;
+            userMomentDal usermdal = new userMomentDal();
+            profileDal pDal = new profileDal();
+            var idtodelete = 0;
+             
+            foreach (var x in myList)
+            {
+                if (x.username == username)
+                {
+                    idtodelete = x.id;
+                }
+            }
+            var ifuserexit = usermdal.userMomentLST.Where(x => (username == x.username)
+            && x.uType == "User" && idtodelete == x.id).SingleOrDefault();
+
+            if (ifuserexit != null)
+            {
+                usermdal.userMomentLST.RemoveRange(usermdal.userMomentLST.Where(x => (x.id == idtodelete) && (x.username == username)));
+                usermdal.SaveChanges();
+                Profile todelete = templist.Find(x=> x.username == username);
+                templist.Remove(todelete);
+            }
+            else
+            {
+                TempData["CurrentMessage"] = "You Cant Delete Your Self From This Group!";
+                return View("View_All_Group_Members", SELECTEDLIST); 
+            }
+            return View("View_All_Group_Members", templist);
+        }
+       
+
+
+        public ActionResult SaveMoment()
+        {
+            return RedirectToAction("UserMoments", "User");
+        }
+
         public static bool isFriend(string id)
         {
             bool friendCheck = false;
@@ -474,6 +554,18 @@ namespace Moments.Controllers
             nDal.nLst.Add(n);
             nDal.SaveChanges();
             return RedirectToAction("UserMoments", "User");
+        }
+
+        void clear_data_from_database()
+        {
+            userMomentDal d = new userMomentDal();
+            momentsDal d1 = new momentsDal();
+            foreach (var entity in d.userMomentLST)
+                d.userMomentLST.Remove(entity);
+            d.SaveChanges();
+            foreach (var entity in d1.momentsLst)
+                d1.momentsLst.Remove(entity);
+            d1.SaveChanges();
         }
 
     }

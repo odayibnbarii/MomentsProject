@@ -33,7 +33,11 @@
         <tr>
 
             <td>
-                @Html.DisplayFor(modelItem => item.mid)
+                <form method="post" action="MomentView">
+                    <button class="btn btn-block" type="submit">@Moments.Controllers.MomentController.getMomentName(item.mid.ToString())</button>
+                    <input name="mid" value="@item.mid" type="hidden" />
+                </form>
+
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.uType)

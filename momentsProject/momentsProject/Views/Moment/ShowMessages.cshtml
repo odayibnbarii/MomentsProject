@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Moments.Models.Messages>
+
+@{
+    ViewBag.Title = "ShowMessages";
+    Layout = "~/Views/Shared/LayoutUser.cshtml";
+}
+
+<h2>ShowMessages</h2>
+
+<form method="post" action="SendMessage">
+    <div class="form-group">
+        <label for="text">Message</label>
+        <textarea rows="4" cols="50" input type="text" class="form-control" name="Message" required></textarea>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-sucess">Send</button>
+    </div>
+</form>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.message)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.username)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.message)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mid)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.username)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+        </td>
+    </tr>
+}
+
+</table>

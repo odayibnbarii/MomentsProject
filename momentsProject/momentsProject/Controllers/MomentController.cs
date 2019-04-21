@@ -200,7 +200,7 @@ namespace Moments.Controllers
             ViewData[tab] = "active";
 
         }
-    
+
         
         public static string getMomentTitle(string invitation)
         {
@@ -216,6 +216,21 @@ namespace Moments.Controllers
             }return "Error occured";
 
         }
+        public static string getMomentName(string mid)
+        {
+            int id = int.Parse(mid);
+            momentsDal dal = new momentsDal();
+            List<moments> m = (from x in dal.momentsLst
+                               where x.mid == id
+                               select x).ToList<moments>();
+            try
+            {
+                return m[0].mName;
+            }catch(Exception e)
+            {
+                return "Not Founded";
+            }
+        }
         public static bool isMember(string username, int mid)
         {
             userMomentDal mDal = new userMomentDal();
@@ -228,6 +243,33 @@ namespace Moments.Controllers
                 return true;
             }
             return false;
+        }
+        public ActionResult ShowMessages()
+        {
+            messagesDal dal = new messagesDal();
+            int mid = int.Parse(Session["LastmMid"].ToString());
+            List<Messages> messages = (from x in dal.MessagesLst
+                                       where x.mid == mid
+                                       select x).ToList<Messages>();
+            return View(messages);
+        }
+        public ActionResult SendMessage()
+        {
+            int mid = int.Parse(Session["LastmMid"].ToString());
+            messagesDal dal = new messagesDal();
+            int id = (from x in dal.MessagesLst select x).ToList<Messages>().Count() + 1;
+            string username = UserController.user.username;
+            string message = Request.Form["Message"].ToString();
+            Messages m = new Messages { id = id, mid = mid, message = message, username = username };
+            dal.MessagesLst.Add(m);
+            try
+            {
+                dal.SaveChanges();
+            }catch(Exception e)
+            {
+                Console.WriteLine("Error, ", e.Message);
+            }
+            return RedirectToAction("ShowMessages", "Moment");
         }
         /*
         public ActionResult UserMoments()

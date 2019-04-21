@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Data.Entity;
 using Moments.Models;
-using momentsProject.Models;
 
 namespace Moments.dal
 {

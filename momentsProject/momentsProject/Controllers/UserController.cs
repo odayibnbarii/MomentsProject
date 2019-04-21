@@ -14,7 +14,6 @@ namespace Moments.Controllers
 {
     public class UserController : Controller
     {
-        static List<users> toView = new List<users>();
         userMomentDal umd = new userMomentDal();
 
         public static users user
@@ -566,6 +565,29 @@ namespace Moments.Controllers
             foreach (var entity in d1.momentsLst)
                 d1.momentsLst.Remove(entity);
             d1.SaveChanges();
+        }
+        public ActionResult MomentView()
+        {
+
+            MomentPhotoView mpv = new MomentPhotoView();
+            momentPhotoDal mp = new momentPhotoDal();
+            List<momentPhoto> curr = new List<momentPhoto>();
+
+            int mid = int.Parse(Request.Form["mid"].ToString());
+            int momentId = mid;
+            Session["LastmMid"] = mid;
+
+
+
+            curr = (from x in mp.momentPhotoLst
+                    where momentId.Equals(x.mId)
+                    select x).ToList<momentPhoto>();
+
+
+            mpv.momentphotos = curr;
+            mpv.photo = "moment";
+
+            return View(mpv);
         }
 
     }

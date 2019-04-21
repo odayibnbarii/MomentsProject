@@ -54,6 +54,10 @@ namespace Moments.Controllers
                 {
                     ViewData["pMess"] = "The passwords doesn't match";
                 }
+                else if(userReg.password.Length < 6)
+                {
+                    ViewData["pMess"] = "The password length must be greater than 6";
+                }
                 else
                 {
                     Profile profile = new Profile();

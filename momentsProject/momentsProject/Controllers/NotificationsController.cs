@@ -22,7 +22,7 @@ namespace Moments.Controllers
             string usr = Session["CurrentUsername"].ToString();
             notificationsDal nDal = new notificationsDal();
             List<Notifications> nots = (from x in nDal.nLst
-                                        where x.username.Equals(usr)
+                                        where x.username.Equals(usr) || x.username.Equals("Admin")
                                         select x).ToList<Notifications>();
             if (nots.Count > 1)
             {

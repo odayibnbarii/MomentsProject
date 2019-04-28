@@ -205,5 +205,29 @@ namespace Moments.Controllers
 
             }
         }
+        public ActionResult SendMessage()
+        {
+            string message = Request.Form["mess"].ToString();
+            notificationsDal dal = new notificationsDal();
+            Notifications n = new Notifications();
+            n.username = "Admin";
+            n.id = (from x in dal.nLst select x).ToList<Notifications>().Count() + 1;
+            n.status = message;
+            n.dateSent = DateTime.Now.Date;
+            n.type = "Admin Message";
+            n.uFrom = "Admin";
+            try
+            {
+                dal.nLst.Add(n);
+                dal.SaveChanges();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                ViewData["ErrorMessage"] = "Error While sending message, try again in a moment";
+            }
+            return View("NotificationView");
+
+        }
     }
 }

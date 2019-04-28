@@ -92,6 +92,11 @@
                         <strong>@Html.DisplayFor(modelItem => item.uFrom)</strong><p class="alert-link">accepted your join request to <strong>@Moments.Controllers.MomentController.getMomentTitle(item.type)</strong></p>
                     </div>
                 }
+                @if (item.type.Equals("Admin Message"))
+                {
+                    <strong>@Html.DisplayFor(modelItem => item.uFrom)</strong><p class="alert-link">@item.status</p>
+
+                }
             </td>
         </tr>
     }

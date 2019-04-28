@@ -264,6 +264,7 @@
     <Content Include="Views\Admin\defaultPhoto.cshtml" />
     <Content Include="Views\User\View_All_Group_Members.cshtml" />
     <Content Include="Views\Moment\ShowMessages.cshtml" />
+    <Content Include="Views\Admin\NotificationView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

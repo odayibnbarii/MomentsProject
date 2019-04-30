@@ -258,6 +258,8 @@ namespace Moments.Controllers
             int counter;
             string MomentName = Request.Form["MomentName"].ToString();
             string MomentDescription = Request.Form["MomentDescription"].ToString();
+            string getthemaxnumber = Request.Form["Momentmaxnumber"].ToString();
+            Session["getthemaxnumber"] = getthemaxnumber;
             var authToken = new byte[16];
             byte[] Momentimage = authToken;
 
@@ -288,6 +290,7 @@ namespace Moments.Controllers
             usermoment.username = u.username;
             Session["mid"] = counter;
             usermoment.mid = counter;
+            Session["getmidd"] = usermoment.mid;
             usermoment.uType = "Admin";
             umd.userMomentLST.Add(usermoment);
             umd.SaveChanges();
@@ -298,48 +301,67 @@ namespace Moments.Controllers
         {
 
             usersDal db = new usersDal();
+            userMomentDal umd = new userMomentDal();
+
+            //Momentmaxnumber
+
+            string getmax = Session["getthemaxnumber"].ToString();
+            int value = Convert.ToInt32(getmax);
+
+
+
+            int getmidnumber = Convert.ToInt32(Session["getmidd"]);
 
             System.Threading.Thread.Sleep(2000);
             var GetIfUserExist = db.userLst.Where(x => x.username == username1).SingleOrDefault();
-            if (GetIfUserExist != null)
+            List<userMoments> usersingroup = (from tmp in umd.userMomentLST where tmp.mid.Equals(getmidnumber) select tmp).ToList<userMoments>();
+            if (usersingroup.Count() <= value)
             {
-                users oh = new users();
-                oh = GetUser();
-                if (username1 != oh.username)
+                if (GetIfUserExist != null)
                 {
-                    Notifications n = new Notifications();
-                    notificationsDal nDal = new notificationsDal();
-                    int id = (from x in nDal.nLst
-                              select x).ToList<Notifications>().Count() + 1;
-                    n.dateSent = DateTime.Now.Date;
-                    n.id = id;
-                    n.status = "Not Accepted";
-                    n.type = "invite " + Session["mid"];
-                    n.username = username1;
-                    n.uFrom = oh.username;
-                    nDal.nLst.Add(n);
-                    nDal.SaveChanges();
-                    
-                    userMoments usermoment = new userMoments();
-                    usermoment.id = 1;
-                    usermoment.mid = Convert.ToInt32(Session["mid"]);
-                    usermoment.username = username1;
-                    usermoment.uType = "User";
-                    umd.userMomentLST.Add(usermoment);
-                    umd.SaveChanges();
-                    
-                    return Json(1);
+                    users oh = new users();
+                    oh = GetUser();
+                    if (username1 != oh.username)
+                    {
+                        Notifications n = new Notifications();
+                        notificationsDal nDal = new notificationsDal();
+                        int id = (from x in nDal.nLst
+                                  select x).ToList<Notifications>().Count() + 1;
+                        n.dateSent = DateTime.Now.Date;
+                        n.id = id;
+                        n.status = "Not Accepted";
+                        n.type = "invite " + Session["mid"];
+                        n.username = username1;
+                        n.uFrom = oh.username;
+                        nDal.nLst.Add(n);
+                        nDal.SaveChanges();
+
+                        userMoments usermoment = new userMoments();
+                        usermoment.id = 1;
+                        usermoment.mid = Convert.ToInt32(Session["mid"]);
+                        usermoment.username = username1;
+                        usermoment.uType = "User";
+                        umd.userMomentLST.Add(usermoment);
+                        umd.SaveChanges();
+
+                        return Json(1);
+                    }
+                    else
+                    {
+                        return Json(2);
+                    }
+
                 }
                 else
                 {
-                    return Json(2);
+                    return Json(0);
                 }
-
             }
             else
             {
-                return Json(0);
+                return Json(3);
             }
+            
         }
 
 

@@ -56,6 +56,14 @@
                         <img id="@obj.postcode" src="@imgSrc" alt="Lights" style="width:300px; height:300px;" />
                         <div class="caption">
                             <p>@obj.username</p>
+                            @if (Moments.Controllers.UserController.user.username.Equals(obj.username))
+                            {
+                                <form action="deletePublicPhoto" method="post">
+                                    <input name="imgCode" value="@obj.postcode" hidden />
+                                    <button class="btn-danger btn-danger" type="submit">Delete</button>
+
+                                </form>
+                            }
                         </div>
 
                     </div>

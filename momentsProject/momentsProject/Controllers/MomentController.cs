@@ -310,6 +310,22 @@ namespace Moments.Controllers
             
 
         }*/
+        public ActionResult deletePublicPhoto()
+        {
+            int postcode = int.Parse(Request.Form["imgCode"].ToString());
+            publicMomentPhotoDal dal = new publicMomentPhotoDal();
+            dal.momentPhotoLst.RemoveRange(dal.momentPhotoLst.Where(x => x.postcode == postcode));
+            try
+            {
+                dal.SaveChanges();
+            }
+            catch(Exception e)
+            {
+                ViewData["ErrorDeletePhoto"] = "Error occured while deleting the photo";
+            }
+            return RedirectToAction("PublicPhoto", "Moment");
+        }
 
     }
+    
 }

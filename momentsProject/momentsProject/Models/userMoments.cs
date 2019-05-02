@@ -18,5 +18,7 @@ namespace Moments.Models
         public int mid { get; set; }
         [Required]
         public string uType { get; set; }
+        [Required]
+        public string GroupName { get; set; }
     }
 }

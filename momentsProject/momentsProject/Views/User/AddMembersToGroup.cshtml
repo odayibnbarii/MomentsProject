@@ -25,6 +25,7 @@
             <button type="submit" class="btn btn-success">Save</button>
         </center>
     </form>
+
 </div>
 
 
@@ -34,21 +35,25 @@
         $("#Status").html("Checking...");
          $.post("@Url.Action("CheckLogInInformation", "User")",
 
-            {
-                username1: $("#MemberName").val()
-            },
-        function (data) {
-            if (data == 1) {
-                $("#Status").html('<font color="Green">Corrent User , User Has Been Added</font>');
-                $("#Email").css("border-color", "Green");
-            } else if (data == 0) {
-                $("#Status").html('<font color="Red"> InCorrent User Name , Please Check your data</font>');
-                $("#Email").css("border-color", "Red");
-            }
-            else if (data ==2) {
-                $("#Status").html('<font color="Red">You Are already at this group</font>');
-                $("#Email").css("border-color", "Red");
-            }
+             {
+                 username1: $("#MemberName").val()
+             },
+             function (data) {
+                 if (data == 1) {
+                     $("#Status").html('<font color="Green">Corrent User , User Has Been Added</font>');
+                     $("#Email").css("border-color", "Green");
+                 } else if (data == 0) {
+                     $("#Status").html('<font color="Red"> InCorrent User Name , Please Check your data</font>');
+                     $("#Email").css("border-color", "Red");
+                 }
+                 else if (data == 2) {
+                     $("#Status").html('<font color="Red">You Are already at this group</font>');
+                     $("#Email").css("border-color", "Red");
+                 }
+                 else if (data == 3) {
+                     $("#Status").html('<font color="Red">You cant add more members , you got the max number in the group.</font>');
+                     $("#Email").css("border-color", "Red");
+                 }
 
             }
          );

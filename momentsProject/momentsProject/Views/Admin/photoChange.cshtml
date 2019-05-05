@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "photoChange";
+    Layout = "~/Views/Shared/LayoutUser.cshtml";
+}
+
+<h2>Logo and Background Change</h2>
+
+<p>Change Backgroud Image:</p>
+<form action="@Url.Action("changeBack", "Admin")" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <label for="file">Filename:</label>
+    <input type="file" name="file" id="file" />
+
+    <input type="submit" name="submit" value="Upload" />
+</form>
+
+<p>Change Logo Image: </p>
+<form action="@Url.Action("changeLogo", "Admin")" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <label for="file">Filename:</label>
+    <input type="file" name="file" id="file" />
+
+    <input type="submit" name="submit" value="Upload" />
+</form>
+

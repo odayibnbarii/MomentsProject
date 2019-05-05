@@ -325,6 +325,22 @@ namespace Moments.Controllers
             }
             return RedirectToAction("PublicPhoto", "Moment");
         }
+        public ActionResult DeleteMomentPhoto()
+        {
+            int postcode = int.Parse(Request.Form["postcode"].ToString());
+            string usrname = Request.Form["user"].ToString();
+            momentPhotoDal dal = new momentPhotoDal();
+            dal.momentPhotoLst.RemoveRange(dal.momentPhotoLst.Where(x => x.postcode == postcode));
+            try
+            {
+                dal.SaveChanges();
+            }
+            catch (Exception e)
+            {
+
+            }
+            return RedirectToAction("MomentView", "User");
+        }
 
     }
     

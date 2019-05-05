@@ -18,23 +18,23 @@ namespace Moments.Controllers
         private UsersStatusDal usdal = new UsersStatusDal();
         private AdminsViewModel avm = new AdminsViewModel();
 
-    
 
-        public admins GetAdmin(string admin="")
+
+        public admins GetAdmin(string admin = "")
         {
             string currentuser;
             try
             {
-               currentuser = Session["CurrentUsername"].ToString();
+                currentuser = Session["CurrentUsername"].ToString();
             }
             catch (Exception)
             {
                 currentuser = admin;
             }
             List<admins> curr = (from x in adal.adminsLst
-                                where x.username == currentuser
-                                select x).ToList<admins>();
-            return curr[0];   
+                                 where x.username == currentuser
+                                 select x).ToList<admins>();
+            return curr[0];
         }
 
         public ActionResult adminsList()
@@ -49,20 +49,20 @@ namespace Moments.Controllers
             return View();
         }
 
-        public ActionResult NewAdmin(admins admin) 
+        public ActionResult NewAdmin(admins admin)
         {
-    
-            
+
+
             List<users> lst = (from x in udal.userLst where x.username == admin.username select x).ToList<users>();
             List<admins> admins = (from x in adal.adminsLst where x.username == admin.username select x).ToList<admins>();
-            if (lst.Count > 0  && admins.Count == 0)
+            if (lst.Count > 0 && admins.Count == 0)
             {
-                
+
                 adal.adminsLst.Add(admin);
                 adal.SaveChanges();
                 ViewBag.MESSAGE = "successfully added";
             }
-            else if (admins.Count >0)
+            else if (admins.Count > 0)
             {
                 TempData["ADDERROR"] = "This user is already an admin!";
             }
@@ -70,7 +70,7 @@ namespace Moments.Controllers
             {
                 TempData["ADDERROR"] = "Username not found!";
             }
-            return RedirectToAction("adminsList","Admin");
+            return RedirectToAction("adminsList", "Admin");
         }
 
         public ActionResult deleteAdmin()
@@ -107,7 +107,7 @@ namespace Moments.Controllers
 
         public ActionResult searchByUsrName()
         {
-            return RedirectToAction("searchByUsrName", "User"," ");
+            return RedirectToAction("searchByUsrName", "User", " ");
         }
 
         public ActionResult usersList()
@@ -154,7 +154,7 @@ namespace Moments.Controllers
             {
                 toDelete = delete;
             }
-             
+
             udal.userLst.RemoveRange(udal.userLst.Where(x => x.username.Equals(toDelete)));
             adal.adminsLst.RemoveRange(adal.adminsLst.Where(x => x.username.Equals(toDelete)));
             pdal.profilesList.RemoveRange(pdal.profilesList.Where(x => x.username.Equals(toDelete)));
@@ -170,7 +170,7 @@ namespace Moments.Controllers
             ndal.SaveChanges();
             fdal.SaveChanges();
 
-            return RedirectToAction("usersList","Admin");
+            return RedirectToAction("usersList", "Admin");
         }
         public void changeDefault(HttpPostedFileBase file)
         {
@@ -205,6 +205,10 @@ namespace Moments.Controllers
 
             }
         }
+        public ActionResult MessageView()
+        {
+            return View("NotificationView");
+        }
         public ActionResult SendMessage()
         {
             string message = Request.Form["mess"].ToString();
@@ -221,13 +225,112 @@ namespace Moments.Controllers
                 dal.nLst.Add(n);
                 dal.SaveChanges();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
                 ViewData["ErrorMessage"] = "Error While sending message, try again in a moment";
             }
             return View("NotificationView");
 
+        }
+        public ActionResult photoChange()
+        {
+            return View("photoChange");
+        }
+        public ActionResult changeLogo(HttpPostedFileBase file)
+        {
+            byte[] data;
+
+            using (Stream inputStram = file.InputStream)
+            {
+                MemoryStream memorystram = inputStram as MemoryStream;
+                if (memorystram == null)
+                {
+                    memorystram = new MemoryStream();
+                    inputStram.CopyTo(memorystram);
+
+                }
+                websiteImages dal = new websiteImages();
+                adminPhoto p = new adminPhoto();
+                int size = (from x in dal.pLst
+                            where x.type.Equals("Logo")
+                            select x).ToList<adminPhoto>().Count();
+                if(size > 0)
+                {
+                    dal.pLst.RemoveRange(dal.pLst.Where(x => x.type.Equals("Logo")));
+                    try
+                    {
+                        dal.SaveChanges();
+                    }
+                    catch (Exception e)
+                    {
+                        return RedirectToAction("photoChange");
+                    }
+                }
+                data = memorystram.ToArray();
+                p.type = "Logo";
+                p.image = data;
+                dal.pLst.Add(p);
+                try
+                {
+                    dal.SaveChanges();
+                }
+                catch(Exception e)
+                {
+                    
+                }
+
+            }
+            Moments.Controllers.HomeController.LoadLogo();
+            return RedirectToAction("photoChange");
+        }
+        public ActionResult changeBack(HttpPostedFileBase file)
+        {
+            byte[] data;
+
+            using (Stream inputStram = file.InputStream)
+            {
+                MemoryStream memorystram = inputStram as MemoryStream;
+                if (memorystram == null)
+                {
+                    memorystram = new MemoryStream();
+                    inputStram.CopyTo(memorystram);
+
+                }
+                websiteImages dal = new websiteImages();
+                int size = (from x in dal.pLst
+                            where x.type.Equals("Background")
+                            select x).ToList<adminPhoto>().Count();
+                if (size > 0)
+                {
+                    dal.pLst.RemoveRange(dal.pLst.Where(x => x.type.Equals("Background")));
+                    try
+                    {
+                        dal.SaveChanges();
+                    }
+                    catch (Exception e)
+                    {
+                        return RedirectToAction("photoChange");
+                    }
+                }
+                adminPhoto p = new adminPhoto();
+                data = memorystram.ToArray();
+                p.type = "Background";
+                p.image = data;
+                dal.pLst.Add(p);
+                try
+                {
+                    dal.SaveChanges();
+                }
+                catch (Exception e)
+                {
+
+                }
+
+
+
+            }
+            return RedirectToAction("photoChange");
         }
     }
 }

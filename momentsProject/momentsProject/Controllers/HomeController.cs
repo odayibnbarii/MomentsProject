@@ -10,8 +10,10 @@ using Moments.dal;
 
 namespace Moments.Controllers
 {
+    
     public class HomeController : Controller
     {
+        public static byte[] image;
         public ActionResult Index()
         {
             TempData["LogMess"] = "";
@@ -19,7 +21,11 @@ namespace Moments.Controllers
             {
                 Session["connected"] = "0";
             }
-            return View();
+            websiteImages dal = new websiteImages();
+            List<adminPhoto> ps = (from x in dal.pLst
+                                   where x.type.Equals("Background")
+                                   select x).ToList<adminPhoto>();
+            return View(ps);
         }
 
         public ActionResult About()
@@ -171,6 +177,23 @@ namespace Moments.Controllers
 
             }
         }
+        public static void LoadLogo()
+        {
+            websiteImages dal = new websiteImages();
+            List<adminPhoto> lst = (from x in dal.pLst
+                                    where x.type.Equals("Logo")
+                                    select x).ToList<adminPhoto>();
+            try
+            {
+                image = lst[0].image;
+            }catch(Exception e)
+            {
+
+            }
+        }
+
+
+
     }
 }
 

@@ -1,4 +1,5 @@
-﻿
+﻿@model IEnumerable<Moments.Models.adminPhoto>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,8 +46,20 @@
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"></button>
-                <img src="~/favicon.png" class="img-center" height="50" width="50" />
-                @Html.ActionLink("Moments", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @{
+                    byte[] img = Moments.Controllers.HomeController.image;
+                    string imgSrc;
+                    if (img != null)
+                    {
+                        var base64 = Convert.ToBase64String(img);
+                        imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                    }
+                    else
+                    {
+                        imgSrc = null;
+                    }
+                }
+                <img src="@imgSrc" class="img-center" height="50" width="50" />               @Html.ActionLink("Moments", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">

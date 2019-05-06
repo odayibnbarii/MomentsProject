@@ -719,8 +719,14 @@ namespace Moments.Controllers
             MomentPhotoView mpv = new MomentPhotoView();
             momentPhotoDal mp = new momentPhotoDal();
             List<momentPhoto> curr = new List<momentPhoto>();
-
-            int mid = int.Parse(Request.Form["mid"].ToString());
+            int mid;
+            try
+            {
+                mid = int.Parse(Request.Form["mid"].ToString());
+            }catch(Exception e)
+            {
+                mid = int.Parse(Session["LastmMid"].ToString());
+            }
             int momentId = mid;
             Session["LastmMid"] = mid;
 
@@ -735,6 +741,22 @@ namespace Moments.Controllers
             mpv.photo = "moment";
 
             return View(mpv);
+        }
+        public ActionResult DeleteMomentPhoto()
+        {
+            int postcode = int.Parse(Request.Form["postcode"].ToString());
+            string usrname = Request.Form["user"].ToString();
+            momentPhotoDal dal = new momentPhotoDal();
+            dal.momentPhotoLst.RemoveRange(dal.momentPhotoLst.Where(x => x.postcode == postcode));
+            try
+            {
+                dal.SaveChanges();
+            }
+            catch (Exception e)
+            {
+
+            }
+            return RedirectToAction("MomentView", "User");
         }
 
     }

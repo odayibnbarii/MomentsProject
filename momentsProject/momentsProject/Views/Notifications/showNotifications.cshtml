@@ -94,10 +94,13 @@
                 }
                 @if (item.type.Equals("Admin Message"))
                 {
-                    <strong>@Html.DisplayFor(modelItem => item.uFrom)</strong><p class="alert-link">@item.status</p>
+                    <div class="alert alert-info">
+                        <strong>@Html.DisplayFor(modelItem => item.uFrom)</strong><p class="alert-link">@item.status</p>
 
+                        
+                    </div>
                 }
-            </td>
+                </td>
         </tr>
     }
 

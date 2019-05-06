@@ -467,7 +467,65 @@ namespace Moments.Controllers
             Session["correntMid"] = mid2;
             return View("EditGroupName");
         }
+        public ActionResult PrivacyEdit(int mid2)
+        {
+            Session["correntMid"] = mid2;
+            return View("PrivacyEditForm");
+        }
+        public ActionResult IconEditName(int mid2)
+        {
+            Session["correntMid"] = mid2;
+            return View("EditGroubIcon");
+        }
+        [HttpPost]
+        public ActionResult EditGroupiIcon(IEnumerable<HttpPostedFileBase>
+            imageModel)
+        {
+            byte[] data;
+            int mid2 = Convert.ToInt32(Session["correntMid"]);
+            using (Stream inputStram = Request.Files[0].InputStream)
+            {
+                MemoryStream memorystram = inputStram as MemoryStream;
+                if (memorystram == null)
+                {
+                    memorystram = new MemoryStream();
+                    inputStram.CopyTo(memorystram);
 
+                }
+                data = memorystram.ToArray();
+                momentsDal md = new momentsDal();
+                List<moments> litsofallmd = (from tmp in md.momentsLst where tmp.mid.Equals(mid2) select tmp).ToList<moments>();
+                var toedit = md.momentsLst.Where(f => f.mid.Equals(mid2)).ToList();
+                toedit.ForEach(a => a.mImage = data);
+                md.SaveChanges();
+
+
+
+               ViewData["photo"] = "Photo Added";
+            }
+            return RedirectToAction("UserMoments", "User");
+
+        }
+        public ActionResult PrivacyEditForm()
+        {
+            int newStatus = 0;
+            var status = Request.Form["editprivacy"];
+            if (status!=null)
+                newStatus = 1;
+            int mid2 = Convert.ToInt32(Session["correntMid"]);
+            momentsDal md = new momentsDal();
+            List<moments> litsofallmd = (from tmp in md.momentsLst where tmp.mid.Equals(mid2) select tmp).ToList<moments>();
+            var toedit = md.momentsLst.Where(f => f.mid.Equals(mid2)).ToList();
+        
+            toedit.ForEach(a => a.IsPublic = newStatus);
+            md.SaveChanges();
+             if(newStatus==1)
+                 TempData["ErrorMessageEdit"] = "Your group will be appear in the searching";
+             else
+                 TempData["ErrorMessageEdit"] = "Your group will not appear in the searching";
+                 
+            return View("PrivacyEditForm");
+        }
         public ActionResult EditGroupName()
         {
             
@@ -607,7 +665,7 @@ namespace Moments.Controllers
             string text = Request.Form["text"];
             momentsDal mDal = new momentsDal();
             List<moments> result = (from x in mDal.momentsLst
-                                    where x.mName.StartsWith(text)
+                                    where x.mName.StartsWith(text) && x.IsPublic==1
                                     select x).ToList<moments>();
             return View(result);
         }

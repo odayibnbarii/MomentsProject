@@ -266,6 +266,10 @@
     <Content Include="Views\Moment\ShowMessages.cshtml" />
     <Content Include="Views\Admin\NotificationView.cshtml" />
     <Content Include="Views\User\EditGroupName.cshtml" />
+    <Content Include="Views\User\EditGroubIcon.cshtml" />
+    <Content Include="Views\User\PrivacyEditForm.cshtml" />
+    <Content Include="Views\Admin\Statistics.cshtml" />
+    <Content Include="Views\Admin\Statistics1.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

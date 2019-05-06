@@ -23,5 +23,12 @@ namespace Moments.Models
         [Required]
         [Column(Order = 4)]
         public byte[] photo { get; set; }
+        [Required]
+        [Column(Order = 5)]
+        public DateTime dateCreate { get; set; }
+        public momentPhoto()
+        {
+            dateCreate= DateTime.Now;
+        }
     }
 }

@@ -229,5 +229,15 @@ namespace Moments.Controllers
             return View("NotificationView");
 
         }
+        public ActionResult Statistics()
+        {
+
+            return View();
+        }
+        public ActionResult Statistics1()
+        {
+
+            return View();
+        }
     }
 }

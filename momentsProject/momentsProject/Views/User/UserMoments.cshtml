@@ -5,9 +5,32 @@
     Layout = "~/Views/Shared/LayoutUser.cshtml";
 }
 
+<head>
+    <style>
+        .mom {
+            width: 100%; /* Try setting this to 400px or something */
+            display: table;
+            border: 1px solid #444444;
+        }
 
+        .child {
+            display: table-cell;
+        }
+
+        .childinner {
+            margin-left: 5px;
+            /* Decorative .. */
+            min-height: 15px;
+        }
+
+        .child:first-child .childinner {
+            margin-left: 0;
+        }
+    </style>
+
+</head>
 <form method="post" action="searchMoment">
-        <input style="margin-top:10px" type="text" name="text" placeholder="Search Moments..."> 
+        <input style="margin-top:10px" type="text" name="text" placeholder="Search Moments...">
         <button class="btn btn-default" type="submit" name="Search">Search</button>
 </form>
 <br />
@@ -23,24 +46,37 @@
 <table class="table">
     <tr>
         <th>
-            Group Name
+            Icon
+        </th>
+
+
+        <th>
+            Moment Name
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.mid)
+           Role
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.uType)
+            Settings
         </th>
-        <th></th>
     </tr>
 
     @foreach (var item in Model)
     {
         <tr>
-
             <td>
-                @Html.DisplayFor(modelItem => item.GroupName)
+                <div class="thumbnail">
+                    @{
+                        var base64 = Convert.ToBase64String(item.image);
+                        var imgSrc = String.Format("data:image/gif;base64,{0}", base64);
+                    }
+                    <img id="@item.mid" src="@imgSrc" alt="None" style="width:50px; height:50px;" />
+
+
+                </div>
             </td>
+
+
             <td>
                 <form method="post" action="MomentView">
                     <button class="btn btn-block" type="submit">@Moments.Controllers.MomentController.getMomentName(item.mid.ToString())</button>
@@ -52,21 +88,24 @@
                 @Html.DisplayFor(modelItem => item.uType)
             </td>
             <td>
-                <center>
-                    @if (item.uType == "Admin")
-                    {
-                        @Html.ActionLink("Delete Group", "ExitGroup", "User", new { id = item.id, mid1 = item.mid }, new { @class = "btn btn-default btn-md" })
-                        @Html.ActionLink("View All Group Users", "View_All_Group_Members", "User", new { mid1 = item.mid }, new { @class = "btn btn-default btn-md" })
-                        @Html.ActionLink("Edit Group Name", "GroupEditName", "User", new { mid2 = item.mid }, new { @class = "btn btn-default btn-md" })
 
-                    }
-                    else
-                    {
-                        @Html.ActionLink("Exit Group", "ExitGroup", "User", new { id = item.id, mid1 = item.mid }, new { @class = "btn btn-default btn-md" })
-                    }
-                </center>
+                @if (item.uType == "Admin")
+                {
+                @Html.ActionLink("Delete Group", "ExitGroup", "User", new { id = item.id, mid1 = item.mid }, new { @class = "btn btn-default btn-md" })
+                @Html.ActionLink("View All Group Users", "View_All_Group_Members", "User", new { mid1 = item.mid }, new { @class = "btn btn-default btn-md" })
+                @Html.ActionLink("Edit Group Name", "GroupEditName", "User", new { mid2 = item.mid }, new { @class = "btn btn-default btn-md" })
+                @Html.ActionLink("Edit Groub Icon", "IconEditName", "User", new { mid2 = item.mid }, new { @class = "btn btn-default btn-md" })
+                @Html.ActionLink("Groub Privacy", "PrivacyEdit", "User", new { mid2 = item.mid }, new { @class = "btn btn-default btn-md" })
+
+                }
+                else
+                {
+                @Html.ActionLink("Exit Group", "ExitGroup", "User", new { id = item.id, mid1 = item.mid }, new { @class = "btn btn-default btn-md" })
+                }
+                
+
             </td>
         </tr>
-    }
+                                        }
 
 </table>

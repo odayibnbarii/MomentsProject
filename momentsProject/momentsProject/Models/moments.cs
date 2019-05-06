@@ -21,6 +21,15 @@ namespace Moments.Models
 
         [Required]
         public byte[] mImage { get; set; }
+        [Required]
+        public int IsPublic { get; set; }
+        [Required]
+        public DateTime dateCreate { get; set; }
+        public moments()
+        {
+            IsPublic = 1;
+            dateCreate = DateTime.Now;
+        }
 
     }
 }

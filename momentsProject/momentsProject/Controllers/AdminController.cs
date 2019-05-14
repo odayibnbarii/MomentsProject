@@ -120,6 +120,16 @@ namespace Moments.Controllers
 
         }
 
+        public ActionResult SearchUser()
+        {
+            String toSearch = Request.Form["username"];
+            UserViewModel uvm = new UserViewModel();
+            uvm.users = (from x in udal.userLst where x.username.StartsWith(toSearch) select x).ToList<users>();
+            uvm.admin = GetAdmin();
+            return View("usersList", uvm);
+            
+        }
+
         public ActionResult UserActivity()
         {
             String toChange = Request.Form["row"].ToString();
@@ -229,5 +239,7 @@ namespace Moments.Controllers
             return View("NotificationView");
 
         }
+
+       
     }
 }

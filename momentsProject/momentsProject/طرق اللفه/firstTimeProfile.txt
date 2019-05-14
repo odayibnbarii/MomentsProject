@@ -32,8 +32,7 @@ var form = document.getElementById('formTest').onsubmit = function(e)
 </script>
 <form action = "@Url.Action("add", "Home")" method="post" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
-    <label for="file">Filename:</label>
-    <input type = "file" name="file" id="file" />
+v    <input type = "file" name="file" id="file" />
 
     <input type = "submit" name="submit" value="Upload" />
 </form>

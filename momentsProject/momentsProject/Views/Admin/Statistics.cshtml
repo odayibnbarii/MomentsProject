@@ -1,0 +1,44 @@
+﻿@using Moments.dal
+@using Moments.Models
+@using System.Collections;
+
+@{
+    ViewBag.Title = "Statistics1";
+    Layout = "~/Views/Shared/LayoutUser.cshtml";
+}
+
+<h2>Create Moment chart</h2>
+@{
+    momentsDal md = new momentsDal();
+    List<moments> checkLSt = (from tmp in md.momentsLst select tmp).ToList<moments>();
+    Hashtable hashtable = new Hashtable();
+    foreach (var m in checkLSt)
+    {
+        if (hashtable.ContainsKey(m.dateCreate.ToString("dd-MM")))
+        {
+            hashtable[m.dateCreate.ToString("dd-MM")] = (int)hashtable[m.dateCreate.ToString("dd-MM")] + 1;
+        }
+        else
+        {
+            hashtable[m.dateCreate.ToString("dd-MM")] = 1;
+        }
+
+    }
+
+    List<string> dates = new List<string>();
+    List<int> counts = new List<int>();
+    foreach (var key in hashtable.Keys)
+    {
+        dates.Add((string)key);
+        counts.Add((int)hashtable[key]);
+    }
+    var myChart = new Chart(width: 800, height: 600)
+.AddTitle("Create Moment chart")
+.AddSeries(
+name: "Employee",
+xValue: dates,
+yValues: counts)
+.Write();
+}
+
+

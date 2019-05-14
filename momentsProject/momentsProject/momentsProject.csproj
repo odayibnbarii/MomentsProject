@@ -141,6 +141,7 @@
     <Compile Include="Controllers\MomentController.cs" />
     <Compile Include="Controllers\NotificationsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="dal\websiteImages.cs" />
     <Compile Include="dal\adminsDal.cs" />
     <Compile Include="dal\messagesDal.cs" />
     <Compile Include="dal\momentPhotoDal.cs" />
@@ -151,6 +152,7 @@
     <Compile Include="dal\publicMomentPhotoDal.cs" />
     <Compile Include="dal\userMomentDal.cs" />
     <Compile Include="dal\UsersStatusDal.cs" />
+    <Compile Include="Models\adminPhoto.cs" />
     <Compile Include="Models\Messages.cs" />
     <Compile Include="Models\momentPhoto.cs" />
     <Compile Include="Models\publicMomentPhoto.cs" />
@@ -249,7 +251,7 @@
     <Content Include="Views\Admin\usersList.cshtml" />
     <Content Include="Views\User\RedirectToProfile.cshtml" />
     <Content Include="Views\Notifications\showNotifications.cshtml" />
-    <Content Include="Views\User\MomentView.cshtml" />
+    <Content Include="Views\Moment\MomentView.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
     <Content Include="Scripts\umd\popper.js.map" />
     <Content Include="Scripts\umd\popper-utils.min.js.map" />
@@ -265,6 +267,14 @@
     <Content Include="Views\User\View_All_Group_Members.cshtml" />
     <Content Include="Views\Moment\ShowMessages.cshtml" />
     <Content Include="Views\Admin\NotificationView.cshtml" />
+    <Content Include="Views\User\EditGroupName.cshtml" />
+    <Content Include="Views\User\EditGroubIcon.cshtml" />
+    <Content Include="Views\User\PrivacyEditForm.cshtml" />
+    <Content Include="Views\Admin\Statistics.cshtml" />
+    <Content Include="Views\Admin\Statistics1.cshtml" />
+    <Content Include="Views\Admin\photoChange.cshtml" />
+    <Content Include="Views\User\MomentView.cshtml" />
+    <Content Include="Views\User\Permission_For_Members.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -323,6 +333,20 @@
   </Target>
   <Target Name="AfterBuild">
   </Target> -->
+  <Target Name="CopyRoslynFiles" AfterTargets="AfterBuild" Condition="!$(Disable_CopyWebApplication) And '$(OutDir)' != '$(OutputPath)'">
+    <ItemGroup>
+      <RoslynFiles Include="$(CscToolPath)\*" />
+    </ItemGroup>
+    <MakeDir Directories="$(WebProjectOutputDir)\bin\roslyn" />
+    <Copy SourceFiles="@(RoslynFiles)" DestinationFolder="$(WebProjectOutputDir)\bin\roslyn" SkipUnchangedFiles="true" Retries="$(CopyRetryCount)" RetryDelayMilliseconds="$(CopyRetryDelayMilliseconds)" />
+  </Target>
+  <Target Name="CopyRoslynFiles" AfterTargets="AfterBuild" Condition="!$(Disable_CopyWebApplication) And '$(OutDir)' != '$(OutputPath)'">
+    <ItemGroup>
+      <RoslynFiles Include="$(CscToolPath)\*" />
+    </ItemGroup>
+    <MakeDir Directories="$(WebProjectOutputDir)\bin\roslyn" />
+    <Copy SourceFiles="@(RoslynFiles)" DestinationFolder="$(WebProjectOutputDir)\bin\roslyn" SkipUnchangedFiles="true" Retries="$(CopyRetryCount)" RetryDelayMilliseconds="$(CopyRetryDelayMilliseconds)" />
+  </Target>
   <Target Name="CopyRoslynFiles" AfterTargets="AfterBuild" Condition="!$(Disable_CopyWebApplication) And '$(OutDir)' != '$(OutputPath)'">
     <ItemGroup>
       <RoslynFiles Include="$(CscToolPath)\*" />

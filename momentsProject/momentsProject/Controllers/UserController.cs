@@ -37,7 +37,7 @@ namespace Moments.Controllers
             //  MomentController.m = new List<moments>();
             return RedirectToAction("Index", "Home");
         }
-        
+
         public users GetUser()
         {
             usersDal dal = new usersDal();
@@ -71,12 +71,12 @@ namespace Moments.Controllers
             String uname = Session["CurrentUsername"].ToString();
             Debug.WriteLine(uname);
             List<Friends> friends1 = (from x in fDal.FriendsLst
-                                      where x.username.Equals(uname) 
+                                      where x.username.Equals(uname)
                                       select x).ToList<Friends>();
-            
+
             List<Friends> friends2 = (from x in fDal.FriendsLst
                                       where x.friendUsername.Equals(uname)
-                                     select x).ToList<Friends>();
+                                      select x).ToList<Friends>();
             IEnumerable<Friends> friendAll = friends1.Concat<Friends>(friends2);
             List<String> friends = new List<string>();
             foreach (var f in friendAll)
@@ -91,7 +91,7 @@ namespace Moments.Controllers
             profileDal pDal = new profileDal();
             List<Profile> profiles = (from x in pDal.profilesList
                                       where friends.Contains<String>(x.username)
-                                            select x).ToList<Profile>();
+                                      select x).ToList<Profile>();
             return View(profiles);
         }
         public ActionResult Delete(String id)
@@ -116,7 +116,7 @@ namespace Moments.Controllers
             List<Profile> profiles = (from x in pDal.profilesList
                                       where friends.Contains<String>(x.username)
                                       select x).ToList<Profile>();
-            return View("MyFriends",profiles);
+            return View("MyFriends", profiles);
 
 
         }
@@ -211,10 +211,10 @@ namespace Moments.Controllers
             newNoti.username = id;
             newNoti.status = "Not Accepted";
             newNoti.uFrom = Session["CurrentUsername"].ToString();
-            newNoti.dateSent=  DateTime.Now;
+            newNoti.dateSent = DateTime.Now;
             newNoti.type = "Friend Request";
-            newNoti.id = size+1;
-        
+            newNoti.id = size + 1;
+
             nDal.nLst.Add(newNoti);
             nDal.SaveChanges();
 
@@ -237,13 +237,13 @@ namespace Moments.Controllers
                 else
                     friends.Add(f.username);
             }
-            
+
             //IEnumerable<Friends> friends = friends1.Union(friends2);
             profileDal pDal = new profileDal();
             List<Profile> profiles = (from x in pDal.profilesList
                                       where friends.Contains<String>(x.username)
                                       select x).ToList<Profile>();
-            return View("MyFriends",profiles);
+            return View("MyFriends", profiles);
         }
         public ActionResult CreateGroup()
         {
@@ -258,6 +258,8 @@ namespace Moments.Controllers
             int counter;
             string MomentName = Request.Form["MomentName"].ToString();
             string MomentDescription = Request.Form["MomentDescription"].ToString();
+            string getthemaxnumber = Request.Form["Momentmaxnumber"].ToString();
+            Session["getthemaxnumber"] = getthemaxnumber;
             var authToken = new byte[16];
             byte[] Momentimage = authToken;
 
@@ -265,7 +267,7 @@ namespace Moments.Controllers
             momentsDal moments = new momentsDal();
 
             List<moments> momentsID = (from tmp in moments.momentsLst select tmp).ToList<moments>();
-            
+
             if (momentsID.Count == 0)
             {
                 counter = 1;
@@ -288,6 +290,9 @@ namespace Moments.Controllers
             usermoment.username = u.username;
             Session["mid"] = counter;
             usermoment.mid = counter;
+            usermoment.GroupName = MomentName;
+            Session["MomentName1"] = MomentName;
+            Session["getmidd"] = usermoment.mid;
             usermoment.uType = "Admin";
             umd.userMomentLST.Add(usermoment);
             umd.SaveChanges();
@@ -298,52 +303,74 @@ namespace Moments.Controllers
         {
 
             usersDal db = new usersDal();
+            userMomentDal umd = new userMomentDal();
+
+            //Momentmaxnumber
+
+            string getmax = Session["getthemaxnumber"].ToString();
+            int value = Convert.ToInt32(getmax);
+
+
+            
+                
+
+            int getmidnumber = Convert.ToInt32(Session["getmidd"]);
 
             System.Threading.Thread.Sleep(2000);
             var GetIfUserExist = db.userLst.Where(x => x.username == username1).SingleOrDefault();
-            if (GetIfUserExist != null)
+            List<userMoments> usersingroup = (from tmp in umd.userMomentLST where tmp.mid.Equals(getmidnumber) select tmp).ToList<userMoments>();
+            if (usersingroup.Count() <= value)
             {
-                users oh = new users();
-                oh = GetUser();
-                if (username1 != oh.username)
+                if (GetIfUserExist != null)
                 {
-                    Notifications n = new Notifications();
-                    notificationsDal nDal = new notificationsDal();
-                    int id = (from x in nDal.nLst
-                              select x).ToList<Notifications>().Count() + 1;
-                    n.dateSent = DateTime.Now.Date;
-                    n.id = id;
-                    n.status = "Not Accepted";
-                    n.type = "invite " + Session["mid"];
-                    n.username = username1;
-                    n.uFrom = oh.username;
-                    nDal.nLst.Add(n);
-                    nDal.SaveChanges();
-                    
-                    userMoments usermoment = new userMoments();
-                    usermoment.id = 1;
-                    usermoment.mid = Convert.ToInt32(Session["mid"]);
-                    usermoment.username = username1;
-                    usermoment.uType = "User";
-                    umd.userMomentLST.Add(usermoment);
-                    umd.SaveChanges();
-                    
-                    return Json(1);
+                    users oh = new users();
+                    oh = GetUser();
+                    if (username1 != oh.username)
+                    {
+                        Notifications n = new Notifications();
+                        notificationsDal nDal = new notificationsDal();
+                        int id = (from x in nDal.nLst
+                                  select x).ToList<Notifications>().Count() + 1;
+                        n.dateSent = DateTime.Now.Date;
+                        n.id = id;
+                        n.status = "Not Accepted";
+                        n.type = "invite " + Session["mid"];
+                        n.username = username1;
+                        n.uFrom = oh.username;
+                        nDal.nLst.Add(n);
+                        nDal.SaveChanges();
+
+                        userMoments usermoment = new userMoments();
+                        usermoment.id = 1;
+                        usermoment.mid = Convert.ToInt32(Session["mid"]);
+                        usermoment.GroupName = Session["MomentName1"].ToString();
+                        usermoment.username = username1;
+                        usermoment.uType = "User";
+                        umd.userMomentLST.Add(usermoment);
+                        umd.SaveChanges();
+
+                        return Json(1);
+                    }
+                    else
+                    {
+                        return Json(2);
+                    }
+
                 }
                 else
                 {
-                    return Json(2);
+                    return Json(0);
                 }
-
             }
             else
             {
-                return Json(0);
+                return Json(3);
             }
+
         }
 
 
-       
+
         public ActionResult UserMoments()
         {
             classActive("momentsActive");
@@ -398,6 +425,7 @@ namespace Moments.Controllers
             Session["SelectedList"] = selected;
             return View(selected);
         }
+
         public ActionResult ExitGroup(int id, int mid1)
         {
             users corruser = new users();
@@ -435,6 +463,115 @@ namespace Moments.Controllers
             }
             return View("UserMainPage");
         }
+        public ActionResult GroupEditName(int mid2)
+        {
+            Session["correntMid"] = mid2;
+            return View("EditGroupName");
+        }
+        public ActionResult PrivacyEdit(int mid2)
+        {
+            Session["correntMid"] = mid2;
+            return View("PrivacyEditForm");
+        }
+        public ActionResult IconEditName(int mid2)
+        {
+            Session["correntMid"] = mid2;
+            return View("EditGroubIcon");
+        }
+        [HttpPost]
+        public ActionResult EditGroupiIcon(IEnumerable<HttpPostedFileBase>
+            imageModel)
+        {
+            byte[] data;
+            int mid2 = Convert.ToInt32(Session["correntMid"]);
+            using (Stream inputStram = Request.Files[0].InputStream)
+            {
+                MemoryStream memorystram = inputStram as MemoryStream;
+                if (memorystram == null)
+                {
+                    memorystram = new MemoryStream();
+                    inputStram.CopyTo(memorystram);
+
+                }
+                data = memorystram.ToArray();
+                momentsDal md = new momentsDal();
+                List<moments> litsofallmd = (from tmp in md.momentsLst where tmp.mid.Equals(mid2) select tmp).ToList<moments>();
+                var toedit = md.momentsLst.Where(f => f.mid.Equals(mid2)).ToList();
+                toedit.ForEach(a => a.mImage = data);
+                md.SaveChanges();
+
+
+
+               ViewData["photo"] = "Photo Added";
+            }
+            return RedirectToAction("UserMoments", "User");
+
+        }
+        public ActionResult PrivacyEditForm()
+        {
+            int newStatus = 0;
+            var status = Request.Form["editprivacy"];
+            if (status!=null)
+                newStatus = 1;
+            int mid2 = Convert.ToInt32(Session["correntMid"]);
+            momentsDal md = new momentsDal();
+            List<moments> litsofallmd = (from tmp in md.momentsLst where tmp.mid.Equals(mid2) select tmp).ToList<moments>();
+            var toedit = md.momentsLst.Where(f => f.mid.Equals(mid2)).ToList();
+        
+            toedit.ForEach(a => a.IsPublic = newStatus);
+            md.SaveChanges();
+             if(newStatus==1)
+                 TempData["ErrorMessageEdit"] = "Your group will be appear in the searching";
+             else
+                 TempData["ErrorMessageEdit"] = "Your group will not appear in the searching";
+                 
+            return View("PrivacyEditForm");
+        }
+        public ActionResult EditGroupName()
+        {
+            
+            var getgroupnewname = Request.Form["editgroupname"].ToString();
+            int mid2 = Convert.ToInt32(Session["correntMid"]);
+            momentsDal md = new momentsDal();
+            userMomentDal umd = new userMomentDal();
+            List<moments> litsofallmd = (from tmp in md.momentsLst where tmp.mid.Equals(mid2) select tmp).ToList<moments>();
+            var toedit = md.momentsLst.Where(f => f.mid.Equals(mid2)).ToList();
+            if (litsofallmd.Count > 0)
+            {
+                if (litsofallmd[0].mName != getgroupnewname)
+                {
+                    toedit.ForEach(a => a.mName = getgroupnewname);
+                    md.SaveChanges();
+                    List<userMoments> membersofthisgroup = (from tmp in umd.userMomentLST where tmp.mid.Equals(mid2) select tmp).ToList<userMoments>();
+                    foreach (var x in membersofthisgroup )
+                    {
+                        umd.userMomentLST.Remove(x);
+                        userMoments toadd1 = new userMoments();
+                        toadd1.id = x.id;
+                        toadd1.GroupName = getgroupnewname;
+                        toadd1.mid = x.mid;
+                        toadd1.username = x.username;
+                        toadd1.uType = x.uType;
+                        umd.userMomentLST.Add(toadd1);
+                        umd.SaveChanges();
+                    }
+                    TempData["ErrorMessageEdit"] = "Your Group Name Has Been Edited Sucessfully";
+                    return View("EditGroupName");
+                }
+            }
+            {
+                TempData["ErrorMessageEdit"] = "You Have A Problem With Group Name , Please Enter New Name";
+                return View("EditGroupName");
+            }
+        }
+       
+        public moments getcorrentrungroup()
+        {
+            moments getcorrgroup = new moments();
+
+            return getcorrgroup;
+        } 
+
         public ActionResult DeleteFriend(string username)
         {
             List<userMoments> myList = (List<userMoments>)Session["UsersList"];
@@ -529,11 +666,17 @@ namespace Moments.Controllers
             string text = Request.Form["text"];
             momentsDal mDal = new momentsDal();
             List<moments> result = (from x in mDal.momentsLst
-                                    where x.mName.StartsWith(text)
+                                    where x.mName.StartsWith(text) && x.IsPublic==1
                                     select x).ToList<moments>();
             return View(result);
         }
-        public ActionResult JoinRequest()
+        public ActionResult ShowAllGroups()
+        {
+            momentsDal mDal = new momentsDal();
+            List<moments> result = (from x in mDal.momentsLst select x).ToList<moments>();
+            return View("searchMoment", result);
+        }
+            public ActionResult JoinRequest()
         {
             userMomentDal mDal = new userMomentDal();
             int mid = Convert.ToInt32(Request.Form["mid"]);
@@ -559,12 +702,17 @@ namespace Moments.Controllers
         {
             userMomentDal d = new userMomentDal();
             momentsDal d1 = new momentsDal();
+            //usersDal user1 = new usersDal();
             foreach (var entity in d.userMomentLST)
                 d.userMomentLST.Remove(entity);
             d.SaveChanges();
             foreach (var entity in d1.momentsLst)
                 d1.momentsLst.Remove(entity);
             d1.SaveChanges();
+            //foreach (var entity in user1.userLst)
+             //   user1.userLst.Remove(entity);
+          //  user1.SaveChanges();
+
         }
         public ActionResult MomentView()
         {
@@ -572,8 +720,14 @@ namespace Moments.Controllers
             MomentPhotoView mpv = new MomentPhotoView();
             momentPhotoDal mp = new momentPhotoDal();
             List<momentPhoto> curr = new List<momentPhoto>();
-
-            int mid = int.Parse(Request.Form["mid"].ToString());
+            int mid;
+            try
+            {
+                mid = int.Parse(Request.Form["mid"].ToString());
+            }catch(Exception e)
+            {
+                mid = int.Parse(Session["LastmMid"].ToString());
+            }
             int momentId = mid;
             Session["LastmMid"] = mid;
 
@@ -589,7 +743,109 @@ namespace Moments.Controllers
 
             return View(mpv);
         }
+        public ActionResult DeleteMomentPhoto()
+        {
+            int postcode = int.Parse(Request.Form["postcode"].ToString());
+            string usrname = Request.Form["user"].ToString();
+            momentPhotoDal dal = new momentPhotoDal();
+            dal.momentPhotoLst.RemoveRange(dal.momentPhotoLst.Where(x => x.postcode == postcode));
+            try
+            {
+                dal.SaveChanges();
+            }
+            catch (Exception e)
+            {
 
+            }
+            return RedirectToAction("MomentView", "User");
+        }
+        public ActionResult Permission_For_Members()
+        {
+            return View();
+        }
+        public ActionResult Permission_Members(int mid1)
+        {
+            userMomentDal usermdal = new userMomentDal();
+            var qr = (from x in usermdal.userMomentLST where x.mid == mid1 select x.username).ToArray();
+            List<userMoments> AllUsers = (from x in usermdal.userMomentLST select x).ToList<userMoments>();
+            List<userMoments> usersiwant = (from x in usermdal.userMomentLST where x.mid.Equals(mid1) select x).ToList<userMoments>();
+            List<userMoments> usersinthisgroup = new List<userMoments>();
+
+            var size = qr.Count();
+
+            foreach (var z in AllUsers)
+            {
+                for (int v = 0; v < size; v++)
+                {
+                    if (z.username == qr[v])
+                    {
+                        usersinthisgroup.Add(z);
+                    }
+                }
+            }
+            Session["UsersList"] = usersinthisgroup;
+            return View("Permission_For_Members", usersiwant);
+        }
+        public ActionResult Demotion_to_user(int mid2 , int id)
+        {
+            userMomentDal usermdal = new userMomentDal();
+            List<userMoments> check = (from x in usermdal.userMomentLST where (x.mid.Equals(mid2) && x.uType.Equals("Admin")) select x).ToList<userMoments>();
+
+            List<userMoments> usersiwant = (from x in usermdal.userMomentLST where (x.mid.Equals(mid2) && x.id.Equals(id)) select x).ToList<userMoments>();
+            if (check.Count() > 1)
+            {
+                if (usersiwant.Count() > 0)
+                {
+                    userMoments useriwant1 = usersiwant[0];
+                    usermdal.userMomentLST.RemoveRange(usermdal.userMomentLST.Where(x => x.mid == useriwant1.mid && x.id == useriwant1.id));
+                    usermdal.SaveChanges();
+                    userMoments newuser = new userMoments();
+                    newuser.GroupName = useriwant1.GroupName;
+                    newuser.id = useriwant1.id;
+                    newuser.image = useriwant1.image;
+                    newuser.IsPublic = useriwant1.IsPublic;
+                    newuser.mid = useriwant1.mid;
+                    newuser.username = useriwant1.username;
+                    newuser.uType = "User";
+                    usermdal.userMomentLST.Add(newuser);
+                    usermdal.SaveChanges();
+                }
+            }
+            else
+            {
+                TempData["ErrorFound"] = "Cannot Found User";
+            }
+
+            return View("UserMainPage");
+        }
+
+        public ActionResult Promotion_to_admin(int mid2 , int id)
+        {
+            userMomentDal usermdal = new userMomentDal();
+            List<userMoments> usersiwant = (from x in usermdal.userMomentLST where (x.mid.Equals(mid2) && x.id.Equals(id)) select x).ToList<userMoments>();
+                if (usersiwant.Count() > 0)
+                {
+                    userMoments useriwant1 = usersiwant[0];
+                    usermdal.userMomentLST.RemoveRange(usermdal.userMomentLST.Where(x => x.mid == useriwant1.mid && x.id == useriwant1.id));
+                    usermdal.SaveChanges();
+                    userMoments newuser = new userMoments();
+                    newuser.GroupName = useriwant1.GroupName;
+                    newuser.id = useriwant1.id;
+                    newuser.image = useriwant1.image;
+                    newuser.IsPublic = useriwant1.IsPublic;
+                    newuser.mid = useriwant1.mid;
+                    newuser.username = useriwant1.username;
+                    newuser.uType = "Admin";
+                    usermdal.userMomentLST.Add(newuser);
+                    usermdal.SaveChanges();
+                }
+            else
+            {
+                TempData["ErrorFound"] = "Cannot Found User";
+            }
+
+            return View("UserMainPage");
+        }
     }
 }
  

@@ -112,10 +112,16 @@ namespace Moments.Controllers
             nDal.SaveChanges();
             userMomentDal mDal = new userMomentDal();
             userMoments uM = new userMoments();
+            int mid = Convert.ToInt32((tmp[0].type.Split(' '))[1]);
             int tableId = (from x in mDal.userMomentLST
                            select x).ToList<userMoments>().Count() + 1;
+            momentsDal d = new momentsDal();
+            string groupName = (from x in d.momentsLst
+                                where x.mid == mid
+                                select x).ToList<moments>()[0].mName;
             uM.id = tableId;
-            uM.mid = Convert.ToInt32((tmp[0].type.Split(' '))[1]);
+            uM.mid = mid;
+            uM.GroupName = groupName;
             uM.uType = "User";
             uM.username = username;
             mDal.userMomentLST.Add(uM);
@@ -148,12 +154,18 @@ namespace Moments.Controllers
             n.username = uFrom;
             nDal.nLst.Add(n);
             nDal.SaveChanges();
+            int mid = Convert.ToInt32((tmp[0].type.Split(' '))[1]);
             userMomentDal mDal = new userMomentDal();
             userMoments uM = new userMoments();
+            momentsDal d = new momentsDal();
+            string groupName = (from x in d.momentsLst
+                                where x.mid == mid
+                                select x).ToList<moments>()[0].mName;
             int tableId = (from x in mDal.userMomentLST
                            select x).ToList<userMoments>().Count() + 1;
             uM.id = tableId;
-            uM.mid = Convert.ToInt32((tmp[0].type.Split(' '))[1]);
+            uM.GroupName = groupName;
+            uM.mid = mid;
             uM.uType = "User";
             uM.username = uFrom;
             mDal.userMomentLST.Add(uM);

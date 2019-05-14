@@ -339,7 +339,7 @@ namespace Moments.Controllers
                         n.uFrom = oh.username;
                         nDal.nLst.Add(n);
                         nDal.SaveChanges();
-
+                        /*
                         userMoments usermoment = new userMoments();
                         usermoment.id = 1;
                         usermoment.mid = Convert.ToInt32(Session["mid"]);
@@ -348,7 +348,7 @@ namespace Moments.Controllers
                         usermoment.uType = "User";
                         umd.userMomentLST.Add(usermoment);
                         umd.SaveChanges();
-
+                        */
                         return Json(1);
                     }
                     else
@@ -460,7 +460,7 @@ namespace Moments.Controllers
                 usermdal.userMomentLST.RemoveRange(usermdal.userMomentLST.Where(x => (x.mid == mid1) && (x.username == corruser.username)));
                 usermdal.SaveChanges();
             }
-            return View("UserMainPage");
+            return RedirectToAction("UserMoments", "User");
         }
         public ActionResult GroupEditName(int mid2)
         {

@@ -26,24 +26,19 @@
             Group Name
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.mid)
+           Permisions
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.uType)
+            <center>Actions</center>
         </th>
-        <th></th>
     </tr>
 
     @foreach (var item in Model)
     {
         <tr>
-
-            <td>
-                @Html.DisplayFor(modelItem => item.GroupName)
-            </td>
             <td>
                 <form method="post" action="MomentView">
-                    <button class="btn btn-block" type="submit">@Moments.Controllers.MomentController.getMomentName(item.mid.ToString())</button>
+                    <button class="btn btn-block" type="submit">@item.GroupName</button>
                     <input name="mid" value="@item.mid" type="hidden" />
                 </form>
 

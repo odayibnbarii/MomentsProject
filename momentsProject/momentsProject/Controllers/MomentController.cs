@@ -187,8 +187,7 @@ namespace Moments.Controllers
 
             mpv.momentphotos = curr;
             mpv.photo = "moment";
-
-            return View("MomentView",mpv );
+            return RedirectToAction("UserMoments", "User");
 
 
         }

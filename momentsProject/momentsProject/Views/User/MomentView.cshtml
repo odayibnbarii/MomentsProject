@@ -16,8 +16,8 @@
 
 <body>
     <h3>Moments</h3>
-    <p>@Html.ActionLink("Messages", "ShowMessages", "Moment")</p>
-
+    @Html.ActionLink("Messages", "ShowMessages", "Moment", new { @class = "btn btn-default btn-md" })
+    
     @using (Html.BeginForm("AddPhoto", "Moment", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()

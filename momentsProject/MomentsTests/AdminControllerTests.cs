@@ -107,5 +107,36 @@ namespace MomentsTests
             
         }
 
+        public void delete_test_user()
+        {
+            usersDal udal = new usersDal();
+            List<users> check_user = (from x in udal.userLst where x.username.Equals("test") select x).ToList<users>();
+            if (check_user.Count == 1)
+            {
+                udal.userLst.RemoveRange(udal.userLst.Where(x => x.username.Equals("test")));
+                udal.SaveChanges();
+            }
+        }
+        [TestMethod]
+        public void get_users_information()
+        {
+            usersDal udal = new usersDal();
+            users usr;
+            delete_test_user();
+            List<users> list = (from x in udal.userLst select x).ToList<users>();
+            int users_number = list.Count;
+            
+
+            //Add a new user.
+            usr = new users { email = "test@gmail.com", firstName = "test", lastName = "test", username = "test", password = "test" };
+            udal.userLst.Add(usr);
+            udal.SaveChanges();
+
+            list = (from x in udal.userLst select x).ToList<users>();
+
+            //Check if gett all users correctly!
+            Assert.AreEqual(users_number+1, list.Count);
+        }
+
     }
 }

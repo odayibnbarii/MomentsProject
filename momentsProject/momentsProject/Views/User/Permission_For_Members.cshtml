@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Moments.Models.userMoments>
+
+@{
+    ViewBag.Title = "Permission_For_Members";
+    Layout = "~/Views/Shared/LayoutUser.cshtml";
+}
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.username)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.mid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.uType)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.username)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.mid)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.uType)
+        </td>
+        <td>
+            @if (item.uType == "Admin")
+            {
+                @Html.ActionLink("Demotion To User", "Demotion_to_user", "User", new { mid2 = item.mid , id=item.id }, new { @class = "btn btn-default btn-md" })
+            }
+        else
+        {
+            @Html.ActionLink("Promotion To Admin", "Promotion_to_admin", "User", new { mid2 = item.mid,id=item.id }, new { @class = "btn btn-default btn-md" })
+        }
+        </td>
+    </tr>
+}
+
+</table>

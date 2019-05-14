@@ -425,6 +425,7 @@ namespace Moments.Controllers
             Session["SelectedList"] = selected;
             return View(selected);
         }
+
         public ActionResult ExitGroup(int id, int mid1)
         {
             users corruser = new users();
@@ -467,7 +468,65 @@ namespace Moments.Controllers
             Session["correntMid"] = mid2;
             return View("EditGroupName");
         }
+        public ActionResult PrivacyEdit(int mid2)
+        {
+            Session["correntMid"] = mid2;
+            return View("PrivacyEditForm");
+        }
+        public ActionResult IconEditName(int mid2)
+        {
+            Session["correntMid"] = mid2;
+            return View("EditGroubIcon");
+        }
+        [HttpPost]
+        public ActionResult EditGroupiIcon(IEnumerable<HttpPostedFileBase>
+            imageModel)
+        {
+            byte[] data;
+            int mid2 = Convert.ToInt32(Session["correntMid"]);
+            using (Stream inputStram = Request.Files[0].InputStream)
+            {
+                MemoryStream memorystram = inputStram as MemoryStream;
+                if (memorystram == null)
+                {
+                    memorystram = new MemoryStream();
+                    inputStram.CopyTo(memorystram);
 
+                }
+                data = memorystram.ToArray();
+                momentsDal md = new momentsDal();
+                List<moments> litsofallmd = (from tmp in md.momentsLst where tmp.mid.Equals(mid2) select tmp).ToList<moments>();
+                var toedit = md.momentsLst.Where(f => f.mid.Equals(mid2)).ToList();
+                toedit.ForEach(a => a.mImage = data);
+                md.SaveChanges();
+
+
+
+               ViewData["photo"] = "Photo Added";
+            }
+            return RedirectToAction("UserMoments", "User");
+
+        }
+        public ActionResult PrivacyEditForm()
+        {
+            int newStatus = 0;
+            var status = Request.Form["editprivacy"];
+            if (status!=null)
+                newStatus = 1;
+            int mid2 = Convert.ToInt32(Session["correntMid"]);
+            momentsDal md = new momentsDal();
+            List<moments> litsofallmd = (from tmp in md.momentsLst where tmp.mid.Equals(mid2) select tmp).ToList<moments>();
+            var toedit = md.momentsLst.Where(f => f.mid.Equals(mid2)).ToList();
+        
+            toedit.ForEach(a => a.IsPublic = newStatus);
+            md.SaveChanges();
+             if(newStatus==1)
+                 TempData["ErrorMessageEdit"] = "Your group will be appear in the searching";
+             else
+                 TempData["ErrorMessageEdit"] = "Your group will not appear in the searching";
+                 
+            return View("PrivacyEditForm");
+        }
         public ActionResult EditGroupName()
         {
             
@@ -607,7 +666,7 @@ namespace Moments.Controllers
             string text = Request.Form["text"];
             momentsDal mDal = new momentsDal();
             List<moments> result = (from x in mDal.momentsLst
-                                    where x.mName.StartsWith(text)
+                                    where x.mName.StartsWith(text) && x.IsPublic==1
                                     select x).ToList<moments>();
             return View(result);
         }
@@ -643,16 +702,16 @@ namespace Moments.Controllers
         {
             userMomentDal d = new userMomentDal();
             momentsDal d1 = new momentsDal();
-            usersDal user1 = new usersDal();
+            //usersDal user1 = new usersDal();
             foreach (var entity in d.userMomentLST)
                 d.userMomentLST.Remove(entity);
             d.SaveChanges();
             foreach (var entity in d1.momentsLst)
                 d1.momentsLst.Remove(entity);
             d1.SaveChanges();
-            foreach (var entity in user1.userLst)
-                user1.userLst.Remove(entity);
-            user1.SaveChanges();
+            //foreach (var entity in user1.userLst)
+             //   user1.userLst.Remove(entity);
+          //  user1.SaveChanges();
 
         }
         public ActionResult MomentView()
@@ -700,7 +759,93 @@ namespace Moments.Controllers
             }
             return RedirectToAction("MomentView", "User");
         }
+        public ActionResult Permission_For_Members()
+        {
+            return View();
+        }
+        public ActionResult Permission_Members(int mid1)
+        {
+            userMomentDal usermdal = new userMomentDal();
+            var qr = (from x in usermdal.userMomentLST where x.mid == mid1 select x.username).ToArray();
+            List<userMoments> AllUsers = (from x in usermdal.userMomentLST select x).ToList<userMoments>();
+            List<userMoments> usersiwant = (from x in usermdal.userMomentLST where x.mid.Equals(mid1) select x).ToList<userMoments>();
+            List<userMoments> usersinthisgroup = new List<userMoments>();
 
+            var size = qr.Count();
+
+            foreach (var z in AllUsers)
+            {
+                for (int v = 0; v < size; v++)
+                {
+                    if (z.username == qr[v])
+                    {
+                        usersinthisgroup.Add(z);
+                    }
+                }
+            }
+            Session["UsersList"] = usersinthisgroup;
+            return View("Permission_For_Members", usersiwant);
+        }
+        public ActionResult Demotion_to_user(int mid2 , int id)
+        {
+            userMomentDal usermdal = new userMomentDal();
+            List<userMoments> check = (from x in usermdal.userMomentLST where (x.mid.Equals(mid2) && x.uType.Equals("Admin")) select x).ToList<userMoments>();
+
+            List<userMoments> usersiwant = (from x in usermdal.userMomentLST where (x.mid.Equals(mid2) && x.id.Equals(id)) select x).ToList<userMoments>();
+            if (check.Count() > 1)
+            {
+                if (usersiwant.Count() > 0)
+                {
+                    userMoments useriwant1 = usersiwant[0];
+                    usermdal.userMomentLST.RemoveRange(usermdal.userMomentLST.Where(x => x.mid == useriwant1.mid && x.id == useriwant1.id));
+                    usermdal.SaveChanges();
+                    userMoments newuser = new userMoments();
+                    newuser.GroupName = useriwant1.GroupName;
+                    newuser.id = useriwant1.id;
+                    newuser.image = useriwant1.image;
+                    newuser.IsPublic = useriwant1.IsPublic;
+                    newuser.mid = useriwant1.mid;
+                    newuser.username = useriwant1.username;
+                    newuser.uType = "User";
+                    usermdal.userMomentLST.Add(newuser);
+                    usermdal.SaveChanges();
+                }
+            }
+            else
+            {
+                TempData["ErrorFound"] = "Cannot Found User";
+            }
+
+            return View("UserMainPage");
+        }
+
+        public ActionResult Promotion_to_admin(int mid2 , int id)
+        {
+            userMomentDal usermdal = new userMomentDal();
+            List<userMoments> usersiwant = (from x in usermdal.userMomentLST where (x.mid.Equals(mid2) && x.id.Equals(id)) select x).ToList<userMoments>();
+                if (usersiwant.Count() > 0)
+                {
+                    userMoments useriwant1 = usersiwant[0];
+                    usermdal.userMomentLST.RemoveRange(usermdal.userMomentLST.Where(x => x.mid == useriwant1.mid && x.id == useriwant1.id));
+                    usermdal.SaveChanges();
+                    userMoments newuser = new userMoments();
+                    newuser.GroupName = useriwant1.GroupName;
+                    newuser.id = useriwant1.id;
+                    newuser.image = useriwant1.image;
+                    newuser.IsPublic = useriwant1.IsPublic;
+                    newuser.mid = useriwant1.mid;
+                    newuser.username = useriwant1.username;
+                    newuser.uType = "Admin";
+                    usermdal.userMomentLST.Add(newuser);
+                    usermdal.SaveChanges();
+                }
+            else
+            {
+                TempData["ErrorFound"] = "Cannot Found User";
+            }
+
+            return View("UserMainPage");
+        }
     }
 }
  

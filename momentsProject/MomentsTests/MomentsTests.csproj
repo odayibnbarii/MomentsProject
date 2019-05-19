@@ -179,7 +179,6 @@
     </Reference>
     <Reference Include="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetFramework.Runtime.4.6.1\lib\v4.6.1\System.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Activities, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetFramework.Runtime.4.6.1\lib\v4.6.1\System.Activities.dll</HintPath>
@@ -246,35 +245,27 @@
     </Reference>
     <Reference Include="System.Data.OracleClient, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetFramework.Runtime.4.6.1\lib\v4.6.1\System.Data.OracleClient.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Data.Services, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetFramework.Runtime.4.6.1\lib\v4.6.1\System.Data.Services.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Data.Services.Client, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetFramework.Runtime.4.6.1\lib\v4.6.1\System.Data.Services.Client.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Data.Services.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetFramework.Runtime.4.6.1\lib\v4.6.1\System.Data.Services.Design.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Data.SqlXml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetFramework.Runtime.4.6.1\lib\v4.6.1\System.Data.SqlXml.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Deployment, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetFramework.Runtime.4.6.1\lib\v4.6.1\System.Deployment.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetFramework.Runtime.4.6.1\lib\v4.6.1\System.Design.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Device, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetFramework.Runtime.4.6.1\lib\v4.6.1\System.Device.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Diagnostics.Contracts, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetFramework.Runtime.4.6.1\lib\v4.6.1\Facades\System.Diagnostics.Contracts.dll</HintPath>
@@ -290,34 +281,27 @@
     </Reference>
     <Reference Include="System.DirectoryServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetFramework.Runtime.4.6.1\lib\v4.6.1\System.DirectoryServices.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.DirectoryServices.AccountManagement, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetFramework.Runtime.4.6.1\lib\v4.6.1\System.DirectoryServices.AccountManagement.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.DirectoryServices.Protocols, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetFramework.Runtime.4.6.1\lib\v4.6.1\System.DirectoryServices.Protocols.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetFramework.Runtime.4.6.1\lib\v4.6.1\System.Drawing.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Drawing.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetFramework.Runtime.4.6.1\lib\v4.6.1\System.Drawing.Design.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Dynamic, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetFramework.Runtime.4.6.1\lib\v4.6.1\System.Dynamic.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Dynamic.Runtime, Version=4.0.10.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetFramework.Runtime.4.6.1\lib\v4.6.1\Facades\System.Dynamic.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="System.EnterpriseServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetFramework.Runtime.4.6.1\lib\v4.6.1\System.EnterpriseServices.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System.Globalization, Version=4.0.10.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\DotNetFramework.Runtime.4.6.1\lib\v4.6.1\Facades\System.Globalization.dll</HintPath>
@@ -443,8 +427,8 @@
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
     </Reference>
-    <Reference Include="System.Web.Mvc, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.4\lib\net45\System.Web.Mvc.dll</HintPath>
+    <Reference Include="System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll</HintPath>

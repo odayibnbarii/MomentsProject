@@ -11,7 +11,7 @@ using System.Web;
 
 namespace MomentsTests
 {
-    [TestClass]
+    /*[TestClass]
     public class GroupControllerTests
     {
         userMomentDal usermomdal = new userMomentDal();
@@ -50,5 +50,5 @@ namespace MomentsTests
             List<moments> list = (from x in momdal.momentsLst where x.mid.Equals(-1) select x).ToList<moments>();
             Assert.AreEqual(list.Count, 10);
         }
-    }
+    }*/
 }

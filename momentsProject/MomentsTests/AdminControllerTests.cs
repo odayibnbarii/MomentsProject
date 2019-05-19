@@ -85,7 +85,7 @@ namespace MomentsTests
             
         }
 
-        [TestMethod]
+        /*[TestMethod]
         public void Delete_exist_User()
         {
             usersDal udal = new usersDal();
@@ -93,7 +93,7 @@ namespace MomentsTests
             List<users> users_list = (from x in udal.userLst where x.username.Equals("test") select x).ToList<users>();
             Assert.AreEqual(users_list.Count, 0);
             
-        }
+        }*/
 
         [TestMethod]
         public void Get_Logged_admin_account()

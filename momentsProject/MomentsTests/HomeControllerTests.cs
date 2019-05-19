@@ -9,7 +9,7 @@ using Moments.Models;
 using Moments.dal;
 namespace MomentsTests
 {
-    [TestClass]
+    [TestClass]//
     public class HomeControllerTests
     {
         HomeController controller = new HomeController();

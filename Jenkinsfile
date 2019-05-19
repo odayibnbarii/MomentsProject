@@ -1,32 +1,14 @@
-pipeline {
-    //Use the following docker image to run your dotnet app.
-    agent { docker { image 'mcr.microsoft.com/dotnet/core/sdk:2.2-alpine' } }
-    environment {HOME = '/tmp'} 
-    stages {
-       
-    // Get some code from a GitHub repository
-    stage('Git') {
-      steps{
-          git 'https://github.com/odayibnbarii/projectNeholUp.git'
-      }
-   }
-   stage('Dotnet Restore'){
-        steps{
-        sh "dotnet restore"
-        }
+node {
+    stage('Checkout git repo') {
+      git branch: 'master', url: params.git_repo
     }
-    
-  stage('Build') {
-   steps {
-        
-    sh "dotnet build"
-   }
-  }
-  stage('Unit Tests') {
-   steps {
-    sh 'dotnet test'
-   }
-  }
-
-  }
- }
+    stage('build and publish') {
+        sh(script: "dotnet publish CustomersDemoClean-2017.sln -c Release ", returnStdout: true)
+    }
+    stage('deploy') {
+        azureWebAppPublish azureCredentialsId: params.azure_cred_id,
+            resourceGroup: params.res_group, appName: params.customersapiapp, sourceDirectory: "src/CustomersAPI/bin/Release/netcoreapp2.1/publish/"
+        azureWebAppPublish azureCredentialsId: params.azure_cred_id,
+            resourceGroup: params.res_group, appName: params.customersmvcapp, sourceDirectory: "src/CustomersMVC/bin/Release/netcoreapp2.1/publish/"
+    }
+}
